@@ -1,0 +1,272 @@
+# ============================================================
+# CORPORATE GOVERNANCE EMPIRICAL PROJECT
+# ============================================================
+
+# 1. PACKAGES
+install.packages(c(
+  "haven", "tidyverse", "fixest", "modelsummary",
+  "janitor", "gt", "webshot2", "broom"
+))
+
+library(haven)
+library(tidyverse)
+library(fixest)
+library(modelsummary)
+library(janitor)
+library(gt)
+library(webshot2)
+library(broom)
+
+# 2. SET PROJECT FOLDER
+project_folder <- "C:/Users/pc/Downloads/Empirical Corporate Governance/assets"
+
+setwd(project_folder)
+
+getwd()
+
+# 3. LOAD DATA
+df <- read_dta(file.path(project_folder, "edata.dta")) %>%
+  clean_names()
+
+# 4. CLEAN NEGATIVE CODES
+df <- df %>%
+  mutate(across(where(is.numeric), ~ ifelse(. < 0, NA, .)))
+
+# 5. CONSTRUCT VARIABLES
+df_clean <- df %>%
+  mutate(
+    sales = ifelse(d2 > 0, d2, NA),
+    log_sales = log(sales),
+    
+    ownership = b3,
+    
+    monitoring = case_when(
+      r2 == 1 ~ 1,
+      r2 == 2 ~ 0,
+      TRUE ~ NA_real_
+    ),
+    
+    incentives = case_when(
+      r8 == 1 ~ 1,
+      r8 == 2 ~ 0,
+      TRUE ~ NA_real_
+    ),
+    
+    employees = l1,
+    log_employees = log(employees + 1),
+    
+    firm_age = ifelse(a20y - b5 >= 0, a20y - b5, NA),
+    
+    foreign_ownership = b2b,
+    
+    exporter = case_when(
+      d3c > 0 ~ 1,
+      d3c == 0 ~ 0,
+      TRUE ~ NA_real_
+    ),
+    
+    survey_year = a20y,
+    country_year = paste(country, survey_year, sep = "_"),
+    
+    informal_payment_dummy = case_when(
+      j7a > 0 ~ 1,
+      j7a == 0 ~ 0,
+      TRUE ~ NA_real_
+    ),
+    
+    corruption_obstacle = case_when(
+      j30f >= 3 ~ 1,
+      j30f < 3 ~ 0,
+      TRUE ~ NA_real_
+    ),
+    
+    pbc_firm = informal_payment_dummy + corruption_obstacle
+  )
+
+# 6. FINAL SAMPLE
+df_reg <- df_clean %>%
+  filter(
+    sample == 1,
+    !is.na(log_sales),
+    !is.na(ownership),
+    !is.na(monitoring),
+    !is.na(incentives),
+    !is.na(pbc_firm),
+    !is.na(log_employees),
+    !is.na(firm_age),
+    !is.na(foreign_ownership),
+    !is.na(exporter),
+    ownership >= 0,
+    ownership <= 100
+  )
+
+# 7. CREATE ENVIRONMENT-LEVEL PBC
+df_reg <- df_reg %>%
+  group_by(country_year, isic_v4) %>%
+  mutate(
+    pbc_environment = ifelse(
+      n() > 1,
+      (sum(pbc_firm, na.rm = TRUE) - pbc_firm) / (n() - 1),
+      NA_real_
+    )
+  ) %>%
+  ungroup() %>%
+  filter(!is.na(pbc_environment)) %>%
+  mutate(
+    high_pbc = ifelse(
+      pbc_environment >= median(pbc_environment, na.rm = TRUE),
+      1, 0
+    ),
+    ownership_high_pbc = ownership * high_pbc
+  )
+
+# 8. CHECK SAMPLE SIZE
+nrow(df_reg)
+
+# 9. DESCRIPTIVE STATISTICS
+datasummary_skim(
+  df_reg %>%
+    select(
+      log_sales,
+      ownership,
+      monitoring,
+      incentives,
+      pbc_firm,
+      pbc_environment,
+      high_pbc,
+      log_employees,
+      firm_age,
+      foreign_ownership,
+      exporter
+    )
+)
+
+# 10. GRAPH
+graph_data <- df_reg %>%
+  mutate(
+    ownership_group = case_when(
+      ownership < 50 ~ "Low ownership",
+      ownership >= 50 & ownership < 100 ~ "High ownership",
+      ownership == 100 ~ "Full ownership"
+    ),
+    pbc_group = ifelse(high_pbc == 1, "High PBC environment", "Low PBC environment")
+  ) %>%
+  group_by(pbc_group, ownership_group) %>%
+  summarise(
+    mean_log_sales = mean(log_sales, na.rm = TRUE),
+    n = n(),
+    .groups = "drop"
+  )
+
+main_graph <- ggplot(graph_data, aes(x = ownership_group, y = mean_log_sales, fill = pbc_group)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Firm Performance by Ownership Concentration and PBC Environment",
+    subtitle = "Average log sales across ownership and governance environments",
+    x = "Ownership concentration",
+    y = "Average log sales",
+    fill = "Governance environment"
+  ) +
+  theme_minimal()
+
+main_graph
+
+ggsave(
+  filename = file.path(project_folder, "main_graph_ownership_pbc.png"),
+  plot = main_graph,
+  width = 8,
+  height = 5
+)
+
+# 11. REGRESSION 1: BASELINE
+model1 <- feols(
+  log_sales ~ ownership +
+    log_employees +
+    firm_age +
+    foreign_ownership +
+    exporter |
+    country_year + isic_v4,
+  cluster = ~country,
+  data = df_reg
+)
+
+summary(model1)
+
+# 12. REGRESSION 2: PBC INTERACTION
+model2 <- feols(
+  log_sales ~ ownership +
+    high_pbc +
+    ownership_high_pbc +
+    monitoring +
+    incentives +
+    log_employees +
+    firm_age +
+    foreign_ownership +
+    exporter |
+    country_year + isic_v4,
+  cluster = ~country,
+  data = df_reg
+)
+
+summary(model2)
+
+# 13. REGRESSION TABLE AS IMAGE
+table_main <- modelsummary(
+  list(
+    "Baseline" = model1,
+    "PBC interaction" = model2
+  ),
+  stars = c('*' = .1, '**' = .05, '***' = .01),
+  statistic = "({std.error})",
+  coef_map = c(
+    "ownership" = "Ownership concentration",
+    "high_pbc" = "High PBC environment",
+    "ownership_high_pbc" = "Ownership × High PBC",
+    "monitoring" = "Monitoring",
+    "incentives" = "Managerial incentives",
+    "log_employees" = "Log employees",
+    "firm_age" = "Firm age",
+    "foreign_ownership" = "Foreign ownership",
+    "exporter" = "Exporter"
+  ),
+  gof_omit = "IC|Log|RMSE",
+  notes = "Standard errors clustered at the country level. All models include country-year and industry fixed effects.",
+  output = "gt"
+)
+
+gtsave(
+  table_main,
+  file.path(project_folder, "regression_table.png")
+)
+
+# 14. WORD TABLE
+modelsummary(
+  list(
+    "Baseline" = model1,
+    "PBC interaction" = model2
+  ),
+  stars = c('*' = .1, '**' = .05, '***' = .01),
+  statistic = "({std.error})",
+  coef_map = c(
+    "ownership" = "Ownership concentration",
+    "high_pbc" = "High PBC environment",
+    "ownership_high_pbc" = "Ownership × High PBC",
+    "monitoring" = "Monitoring",
+    "incentives" = "Managerial incentives",
+    "log_employees" = "Log employees",
+    "firm_age" = "Firm age",
+    "foreign_ownership" = "Foreign ownership",
+    "exporter" = "Exporter"
+  ),
+  gof_omit = "IC|Log|RMSE",
+  output = file.path(project_folder, "results.docx")
+)
+
+# 15. SAVE CLEAN DATA
+write_csv(
+  df_reg,
+  file.path(project_folder, "clean_regression_data.csv")
+)
+
+# 16. CONFIRM SAVED FILES
+list.files(project_folder, pattern = "main_graph|regression_table|results|clean_regression")
