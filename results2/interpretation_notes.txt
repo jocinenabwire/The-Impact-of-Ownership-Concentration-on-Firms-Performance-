@@ -1,0 +1,14 @@
+This script estimates three focused regressions.
+
+Model 1 is the baseline specification. It estimates the association between ownership concentration and firm performance, controlling for firm size, firm age, foreign ownership, exporter status, country fixed effects, survey-year fixed effects, and industry fixed effects.
+
+Model 2 adds the proposed mechanisms: monitoring, incentives, PBC, and the interaction between ownership concentration and PBC. This model directly addresses the paper's main mechanism question.
+
+Model 3 is a robustness regression. It decomposes the PBC proxy into informal payments and corruption-related measures and interacts them with ownership concentration.
+
+PBC is not measured using external control premia because the WBES does not contain market-based ownership-transfer prices. Instead, the script constructs a WBES-based PBC proxy using two observable signs of weak governance and potential private benefit extraction: low reliability of reported financial figures and informal payments.
+
+The interaction between ownership and PBC is central. If the coefficient is negative, this suggests that ownership concentration is less beneficial, or more harmful, when private benefits of control are more likely.
+
+The results should be interpreted as conditional associations, not causal effects, because ownership concentration and governance mechanisms are not randomly assigned.
+

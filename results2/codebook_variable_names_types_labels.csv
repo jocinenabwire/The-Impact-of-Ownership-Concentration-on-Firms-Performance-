@@ -1,0 +1,647 @@
+variable_name,variable_type,variable_label,missing_values
+idstd,numeric,WEB STD FIRMID,0
+country,character,Economy,0
+region,"haven_labelled, vctrs_vctr, double",Region,0
+sample,numeric,Dummy equal 1 for the latest survey in each economy,0
+wt,numeric,Weight According To Median Eligibility,0
+wt_br,numeric,Weights for follow-up survey sample questions according to median eligibility,264442
+wt_rs,numeric,Control: Re-Scaled Es Survey Weights,0
+stra_sector,character,Cut: Stratification Sector,0
+sector_ms,character,"Sector: Manufacturing Or Services, based on stra_sector",0
+size,"haven_labelled, vctrs_vctr, double","Small, Medium, And Large Firm Categories Based On No. Of Employees",0
+size_num,numeric,"Total Number Of Full Time Employees, Adjusted For Temp. and Part-time Workers",1383
+a3ax,character,City/ Town/ Village,0
+isic_v4,numeric,"ISIC code (Rev. 4.0), based on d1a2_v4",11804
+isic_v3_1,numeric,"ISIC Code 3.1., Based On d1a2",99384
+a6b,"haven_labelled, vctrs_vctr, double",NOT FOR ANALYSIS: Screener Size,66238
+a6c,numeric,Screener Size,140575
+a6c_br,numeric,Follow-up: Screener Size,268715
+a7,"haven_labelled, vctrs_vctr, double",Establishment Is Part Of A Large Firm,3791
+a7_br,"haven_labelled, vctrs_vctr, double",Follow-up: Establishment part of a multi-establishment Firm?,268715
+a7a,"haven_labelled, vctrs_vctr, double",Number Of Establishments In The Firm,193173
+a7a_br,"haven_labelled, vctrs_vctr, double",Follow-up: Number of Establishments In The Firm,270193
+a7c,"haven_labelled, vctrs_vctr, double",Does This Headquarters Location Engage In Production Or Sales At This Location?,256571
+a7c_br,"haven_labelled, vctrs_vctr, double",Follow-up: Does This Headquarters Location Engage In Production or Sales At This,270193
+a8,"haven_labelled, vctrs_vctr, double",Type Of Establishment,207094
+a8a,numeric,Type Of Establishment,268040
+a9,"haven_labelled, vctrs_vctr, double",Establishment'S Financial Statements Prepared Separately From Hq Statements,200504
+a9_br,"haven_labelled, vctrs_vctr, double",Follow-up: Establishment'S Financial Statements Prepared Separately From Hq Stat,270193
+a10,"haven_labelled, vctrs_vctr, double",Establishment Financial Statements Separate From Other Establishments,205721
+a11,"haven_labelled, vctrs_vctr, double","If Hq, Financial Statements Independent Of The Rest Of Establishment",193048
+a11_br,"haven_labelled, vctrs_vctr, double","Follow-up: If Hq, Financial Statements Independent of The Rest of Establishment",270193
+a11a,numeric,How Many Establishments Are Included In The Financial Statements?,260029
+a14,character,Start Date,0
+a14d,numeric,Day,4903
+a14d_br,"haven_labelled, vctrs_vctr, double",Follow-up: Day,268715
+a14h,numeric,Hour,6688
+a14h_br,"haven_labelled, vctrs_vctr, double",Follow-up: Hour,268715
+a14m,numeric,Month,5799
+a14m_br,"haven_labelled, vctrs_vctr, double",Follow-up: Month,268715
+a14min,numeric,Minutes,6341
+a14min_br,"haven_labelled, vctrs_vctr, double",Follow-up: Minutes,268715
+a14y,numeric,Year,29791
+a14y_br,"haven_labelled, vctrs_vctr, double",Follow-up: Year,268715
+a15,character,End Date,0
+a15d,numeric,Day,6078
+a15d_br,"haven_labelled, vctrs_vctr, double",Follow-up: Day,268715
+a15h,numeric,Hour,6358
+a15h_br,"haven_labelled, vctrs_vctr, double",Follow-up: Hour,268715
+a15m,numeric,Month,6101
+a15m_br,"haven_labelled, vctrs_vctr, double",Follow-up: Month,268715
+a15min,numeric,Minutes,6368
+a15min_br,"haven_labelled, vctrs_vctr, double",Follow-up: Minutes,268715
+a15y,numeric,Year,51532
+a15y_br,"haven_labelled, vctrs_vctr, double",Follow-up: Year,268715
+a16,"haven_labelled, vctrs_vctr, double",Perception Of The Questions Regarding Opinions And Perceptions,13395
+a16_br,"haven_labelled, vctrs_vctr, double",Follow-up: Perception of The Questions Regarding Opinions And Perceptions,267728
+a17,"haven_labelled, vctrs_vctr, double",Responses To The Questions About Figures Areâ€¦,551
+a17_br,"haven_labelled, vctrs_vctr, double",Follow-up: Responses To The Questions About Figures Areâ€¦,267728
+a18,"haven_labelled, vctrs_vctr, double",This Questionnaire Was Completed In:,6576
+a18_br,"haven_labelled, vctrs_vctr, double",Follow-up: This Questionnaire Was Completed In:,267728
+a19h,numeric,"If Option 2 Or 3 In A.18, Estimate Duration Of The Whole Interview: Hours",224007
+a19h_br,"haven_labelled, vctrs_vctr, double","Follow-up: If Option 2 or 3 In A.18, Estimate Duration of The Whole Interview: H",270089
+a19min,numeric,"If Option 2 Or 3 In A.18, Estimate Duration Of The Whole Interview:Minutes",223899
+a20dend,numeric,Fiscal Year End Day,264996
+a20dstart,numeric,Day When The Fiscal Year Begins,267777
+a20mend,numeric,Fiscal Year End Month,264996
+a20mstart,numeric,Month When The Fiscal Year Begins,267777
+a20yend,numeric,Year When The Fiscal Year Ends,267777
+a20ystart,numeric,Year When The Fiscal Year Begins,267777
+b1,"haven_labelled, vctrs_vctr, double",Legal Status Of The Firm,5
+b1x,character,Other (Specify),0
+b2a,"haven_labelled, vctrs_vctr, double","% Owned By Private Domestic Individuals, Companies Or Organizations",511
+b2b,"haven_labelled, vctrs_vctr, double","% Owned By Private Foreign Individuals, Companies Or Organizations",534
+b2c,"haven_labelled, vctrs_vctr, double",% Owned By Government/State,525
+b2d,"haven_labelled, vctrs_vctr, double",% Owned By Other,531
+b3,"haven_labelled, vctrs_vctr, double",What Percentage Of This Firm Does The Largest Owner(S) Own?,52701
+b3a,numeric,Is the largest owner also the top manager?,161858
+b4,"haven_labelled, vctrs_vctr, double","Amongst The Owners Of The Firm, Are There Any Females?",3702
+b4a,"haven_labelled, vctrs_vctr, double",% Of The Firm Owned By Females,208965
+b4a_cat,"haven_labelled, vctrs_vctr, double",Female Ownership Categories,74628
+b5,"haven_labelled, vctrs_vctr, double",Year Establishment Began Operations,43
+b6,"haven_labelled, vctrs_vctr, double",Number Of Full-Time Employees Of The Establishment When It Started Operations,5318
+b6a,"haven_labelled, vctrs_vctr, double",Was Establishment Formally Registered When It Began Operations?,9629
+b6b,"haven_labelled, vctrs_vctr, double",In What Year Was This Establishment Formally Registered?,21290
+b7,"haven_labelled, vctrs_vctr, double",How Many Years Of Experience Working In This Sector Does The Top Manager Have?,1040
+b7a,"haven_labelled, vctrs_vctr, double",Is The Top Manager Female?,28951
+b8,"haven_labelled, vctrs_vctr, double",Does Establishment Have An Internationally-Recognized Quality Certification?,194
+b8x,character,Specify The Internationally-Recognized Quality Certifications,0
+c1,"haven_labelled, vctrs_vctr, double",Use Of Own Transport,257716
+c2,"haven_labelled, vctrs_vctr, double",% Of Shipments Use Own Transport,262084
+c3,"haven_labelled, vctrs_vctr, double",Application To Obtain An Electrical Connection Submitted Over The Last 2 Years,85
+c3_br,"haven_labelled, vctrs_vctr, double",Follow-up: Application To Obtain An Electrical Connection Submitted Over The Las,268715
+c4,"haven_labelled, vctrs_vctr, double",How Many Days Did It Take For You To Receive An Electrical Connection Service?,234184
+c5,"haven_labelled, vctrs_vctr, double",Informal Gift/Payment Expected Or Requested For An Electrical Connection?,234132
+c31,"haven_labelled, vctrs_vctr, double",Cost to obtain electrical connection,263351
+c31_br,"haven_labelled, vctrs_vctr, double",Cost to obtain electrical connection,269937
+c32,"haven_labelled, vctrs_vctr, double",Electricity consumption in a typical month (kWh),197586
+c32_br,"haven_labelled, vctrs_vctr, double",Electricity consumption in a typical month (kWh),267397
+c32b,"haven_labelled, vctrs_vctr, double",Cost of monthly electricity consumption,252630
+c6,"haven_labelled, vctrs_vctr, double","Over Last Fy, Did This Establishment Experience Power Outages?",693
+c7,"haven_labelled, vctrs_vctr, double",Number Of Power Outages Experienced In A Typical Month In Last Fiscal Year,142827
+c8,"haven_labelled, vctrs_vctr, double",How Long Did The Average Power Outage Last?,164985
+c8a,"haven_labelled, vctrs_vctr, double",Average Duration Of Power Outages {Hours; Minutes},224890
+c8b,"haven_labelled, vctrs_vctr, double",How Long Did These Power Outages Last On Average?,224761
+c9a,"haven_labelled, vctrs_vctr, double","In Last Fy, Losses As % Of Annual Sales Due To Power Outages",172636
+c9b,"haven_labelled, vctrs_vctr, double","In Last Fy, Value Of Losses Due To Power Outages",241241
+c10,"haven_labelled, vctrs_vctr, double",Generator Shared Or Owned Over The Course Of Last Fiscal Year?,21640
+c11,"haven_labelled, vctrs_vctr, double",% Electricity From Generator Owned/Shared By The Establishment In Last Fiscal Yr,190539
+c43,"haven_labelled, vctrs_vctr, double","Over FY, did establishment use on-site solar panels?",252191
+c44,"haven_labelled, vctrs_vctr, double",Percentage of electricity from solar panels,267453
+c12,"haven_labelled, vctrs_vctr, double",Application To Obtain A Water Connection Submitted Over The Last 2 Years,7278
+c12_br,"haven_labelled, vctrs_vctr, double",Follow-up: Application To Obtain A Water Connection Submitted Over The Last 2 Ye,268715
+c13,"haven_labelled, vctrs_vctr, double",How Many Days Did It Take For You To Obtain A Water Connection?,251497
+c14,"haven_labelled, vctrs_vctr, double","When You Applied For A Water Connection, Was An Informal Gift/Payment Requested?",251452
+c33,"haven_labelled, vctrs_vctr, double",Cost to obtain water connection,267146
+c33_br,"haven_labelled, vctrs_vctr, double",Cost to obtain water connection,270086
+c34,"haven_labelled, vctrs_vctr, double",Water consumption in a typical month,197586
+c34_br,"haven_labelled, vctrs_vctr, double",Water consumption in a typical month,267397
+c34b,"haven_labelled, vctrs_vctr, double",Unit measure of answer to C34,224774
+c34b_br,"haven_labelled, vctrs_vctr, double",Unit measure of answer to BEEc2b,268518
+c34bx,character,Other (Specify),0
+c34bx_br,character,Other (Specify),0
+c34c,"haven_labelled, vctrs_vctr, double",Cost of monthly water consumption,252191
+c45,"haven_labelled, vctrs_vctr, double",Which best characterizes quality of piped water received from utility provider,252191
+c15,"haven_labelled, vctrs_vctr, double",Did You Experience Insufficient Water Supply For Production In Last Fiscal Yr?,163953
+c15_br,"haven_labelled, vctrs_vctr, double",Did You Experience Insufficient Water Supply For Production In Last FY?,269506
+c15_esbr,"haven_labelled, vctrs_vctr, double",Did this establishment experience insufficient water supply?  COMBINED VERSION M,269653
+c152,"haven_labelled, vctrs_vctr, double",Did You Experience Insufficient Water Supply In Last FY?,198375
+c152_br,"haven_labelled, vctrs_vctr, double",Did You Experience Insufficient Water Supply In Last FY?,268185
+c16,"haven_labelled, vctrs_vctr, double",Frequency Of Incidents Of Water Shortages In A Typical Month In Last Fiscal Yr,255552
+c16_esbr,"haven_labelled, vctrs_vctr, double",Number of incidents of water insufficiency in a typical month.  COMBINED VERSION,270072
+c162,"haven_labelled, vctrs_vctr, double",Frequency of Incidents of Water Shortages In A Typical Month In Last FY,262813
+c162_br,"haven_labelled, vctrs_vctr, double",Frequency of Incidents of Water Shortages In A Typical Month In Last FY,269897
+c17,"haven_labelled, vctrs_vctr, double",Average Length Of Water Shortages (Affecting Production) In Last Fiscal Year,258477
+c17_esbr,"haven_labelled, vctrs_vctr, double",Average duration of insufficient water supply  COMBINED VERSION Manufacturing fr,270097
+c172,"haven_labelled, vctrs_vctr, double",Average Length of Water Shortages In Last Fiscal Year,264071
+c172_br,"haven_labelled, vctrs_vctr, double",Average Length of Water Shortages In Last Fiscal Year,269943
+c35a,"haven_labelled, vctrs_vctr, double","In Last FY, Losses As % of Annual Sales Due To Water Shortages",265972
+c35a_br,"haven_labelled, vctrs_vctr, double","In Last FY, Losses As % of Annual Sales Due To Water Shortages",269905
+c35b,"haven_labelled, vctrs_vctr, double","In Last FY, Value of Losses Due To Water Shortages",269737
+c35b_br,"haven_labelled, vctrs_vctr, double","In Last FY, Value of Losses Due To Water Shortages",270151
+c18,"haven_labelled, vctrs_vctr, double",Water From Public Source,239603
+c19,"haven_labelled, vctrs_vctr, double",Application To Obtain A Telephone Connection Submitted Over The Last Two Years,201985
+c20,"haven_labelled, vctrs_vctr, double",How Many Days Did It Take For You To Receive A Telephone Connection Service?,250049
+c21,"haven_labelled, vctrs_vctr, double",When You Applied For A Telephone Connection Was An Informal Gift Requested?,249984
+c22a,"haven_labelled, vctrs_vctr, double",Do You Currently Communicate With Clients And Suppliers By E-Mail?,134138
+c22b,"haven_labelled, vctrs_vctr, double",Establishment Has Its Own Website,86
+c36,"haven_labelled, vctrs_vctr, double",Application To Obtain Fixed Broadband Internet Connection Over The Last 2 Years,196390
+c36_br,"haven_labelled, vctrs_vctr, double",Application To Obtain Fixed Broadband Internet Connection Over The Last 2 Years,266784
+c37,"haven_labelled, vctrs_vctr, double",How Many Days Did It Take For You To Obtain Internet Connection?,259220
+c37_br,"haven_labelled, vctrs_vctr, double",How Many Days Did It Take For You To Obtain Internet Connection?,269696
+c38,"haven_labelled, vctrs_vctr, double",Cost to obtain Internet connection,261997
+c38_br,"haven_labelled, vctrs_vctr, double",Cost to obtain Internet connection,269696
+c39,"haven_labelled, vctrs_vctr, double",Did You Experience Internet Disruptions In Last FY?,193435
+c39_br,"haven_labelled, vctrs_vctr, double",Did You Experience Internet Disruptions In Last FY?,268227
+c40a,"haven_labelled, vctrs_vctr, double",Average Length of Internet Disruptions: Hours,256885
+c40a_br,"haven_labelled, vctrs_vctr, double",Average Length of Internet Disruptions: Hours,269226
+c40b,"haven_labelled, vctrs_vctr, double",Average Length of Internet Disruptions: Minutes,265715
+c40b_br,"haven_labelled, vctrs_vctr, double",Average Length of Internet Disruptions: Minutes,269973
+c41a,"haven_labelled, vctrs_vctr, double","In Last FY, Losses As % of Annual Sales Due To Internet Disruptions",257466
+c41a_br,"haven_labelled, vctrs_vctr, double","In Last FY, Losses As % of Annual Sales Due To Internet Disruptions",269828
+c41b,"haven_labelled, vctrs_vctr, double","In Last FY, Value of Losses Due To Internet Disruptions",269070
+c41b_br,"haven_labelled, vctrs_vctr, double","In Last FY, Value of Losses Due To Internet Disruptions",270149
+c42,"haven_labelled, vctrs_vctr, double",How difficult to switch internet providers?,197377
+c42_br,"haven_labelled, vctrs_vctr, double",How difficult to switch internet providers?,265954
+c23,"haven_labelled, vctrs_vctr, double","Does The Firm Have A High-Speed, Broadband Internet Connection On Its Premises?",226344
+c24a,"haven_labelled, vctrs_vctr, double",Internet - Communication,267501
+c24b,"haven_labelled, vctrs_vctr, double",Is The Internet Connection Used To: Order Purchases For This Establishment?,250816
+c24c,"haven_labelled, vctrs_vctr, double",Is The Internet Connection Used To: Deliver Services To Your Clients?,254217
+c24d,"haven_labelled, vctrs_vctr, double",Is Internet Used To: Do Research And Develop Ideas On New Products And Services?,250817
+c25,"haven_labelled, vctrs_vctr, double",Was Unavailability Of Internet Connection Experienced In Last Fiscal Year?,264260
+c26,"haven_labelled, vctrs_vctr, double",Frequency Of Unavailability Of Internet Connection In Av. Month In Last Fisc Yr,267133
+c27,"haven_labelled, vctrs_vctr, double",Length Of Unavailability Of Internet Connection In Av. Month In Last Fiscal Yr,267508
+c29,"haven_labelled, vctrs_vctr, double",The Majority Of Cell Phones Used For The Operations Of The Establishment Are?,258858
+c30a,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Electricity To Operations Of This Establishment?,635
+c30b,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Telecommunications To Operations Of This Establishment?,163402
+d1a1a,"haven_labelled, vctrs_vctr, double",Establishment'S Main Product/Service Last Fiscal Yr,124941
+d1a1a_br,"haven_labelled, vctrs_vctr, double",Establishment's Main Porduct/Service,268549
+d1a2,"haven_labelled, vctrs_vctr, double",Main Product/Service ISIC (Rev. 3.1) Code,82870
+d1a2_v4,numeric,Main Product/Service ISIC (Rev. 4) Code,178956
+d1a3,"haven_labelled, vctrs_vctr, double",Main Product/Service: Percent Of Total Annual Sales,10767
+d2,"haven_labelled, vctrs_vctr, double","In Last Fiscal Year, What Were This Establishmentâ€™S Total Annual Sales?",52
+d2_br,"haven_labelled, vctrs_vctr, double","Follow-up: In Last Fiscal Year, What Were This Establishment'S",268715
+d2x,character,Please Also Write Out The Number,0
+d2a1,"haven_labelled, vctrs_vctr, double",What were the establishment's sales 2 years ago?,251340
+d2a1_br,"haven_labelled, vctrs_vctr, double",Follow-up: What were the establishment's sales 2 years ago?,269516
+d2a1x,character,Please Also Write Out The Number,0
+d1a6a,"haven_labelled, vctrs_vctr, double",Total number of hotel rooms in the last FY,264707
+d1a6b,"haven_labelled, vctrs_vctr, double",Total areas of rooms in the last FY,264710
+d1a6c,"haven_labelled, vctrs_vctr, double",Specify units,265722
+d3a,"haven_labelled, vctrs_vctr, double",% Of Sales: National Sales,173
+d3a_br,"haven_labelled, vctrs_vctr, double",Follow-up: % of Sales: National Sales,268715
+d3b,"haven_labelled, vctrs_vctr, double",% O Sales: Indirect Exports,255
+d3b_br,"haven_labelled, vctrs_vctr, double",Follow-up: % O Sales: Indirect Exports,268715
+d3c,"haven_labelled, vctrs_vctr, double",% Of Sales: Direct Exports,297
+d3c_br,"haven_labelled, vctrs_vctr, double",Follow-up: % of Sales: Direct Exports,268715
+d31x,character,Main destination of exports (economy code),0
+d31x_br,"haven_labelled, vctrs_vctr, double",Main destination of exports (economy code),270173
+d32,"haven_labelled, vctrs_vctr, double",Main point of exit,262392
+d32_br,"haven_labelled, vctrs_vctr, double",Main point of exit,269705
+d42,"haven_labelled, vctrs_vctr, double","When goods exported directly, was any inspection, certification, or licensing do",268005
+d43a,"haven_labelled, vctrs_vctr, double","Average duration to conduct inspections, certifications, and licensing: days",268954
+d43b,"haven_labelled, vctrs_vctr, double","Average duration to conduct inspections, certifications, and licensing: hours",268954
+d4,"haven_labelled, vctrs_vctr, double","In Last Fy, Avg. Num. Of Days For Exported Goods To Clear Customs?",227218
+d4a,"haven_labelled, vctrs_vctr, double","In Last FY, Avg. Num. of Days For Exported Goods To Clear Customs?",259791
+d4a_br,"haven_labelled, vctrs_vctr, double","In Last FY, Avg. Num. of Days For Exported Goods To Clear Customs?",269948
+d4b,"haven_labelled, vctrs_vctr, double","If less than a day, total hours for exported goods to clear customs",266547
+d4b_br,"haven_labelled, vctrs_vctr, double","If less than a day, total hours for exported goods to clear customs",270181
+d33a,"haven_labelled, vctrs_vctr, double","In Last FY, Avg. Num. of Days For Exported Goods To Clear all border control age",262925
+d33a_br,"haven_labelled, vctrs_vctr, double","In Last FY, Avg. Num. of Days For Exported Goods To Clear all border control age",269759
+d33b,"haven_labelled, vctrs_vctr, double","If less than a day, total hours for exported goods to clear all border control a",269245
+d33b_br,"haven_labelled, vctrs_vctr, double","If less than a day, total hours for exported goods to clear all border control a",269989
+d34,"haven_labelled, vctrs_vctr, double",FCA costs to comply with all export requirements (% of value of goods exported),260204
+d34_br,"haven_labelled, vctrs_vctr, double",FCA costs to comply with all export requirements (% of value of goods exported),269749
+d342,"haven_labelled, vctrs_vctr, double",Costs to Comply with all Export Requirements (% of value of goods exported),263391
+d342b,"haven_labelled, vctrs_vctr, double",Most Frequently Used Incoterm When Exporting Directly,265578
+d35,"haven_labelled, vctrs_vctr, double",Any exports shipped by main parcel?,260061
+d35_br,"haven_labelled, vctrs_vctr, double",Any exports shipped by main parcel?,269766
+d352,"haven_labelled, vctrs_vctr, double",Any online orders that didn't require custom duties in destination,267860
+d36a,"haven_labelled, vctrs_vctr, double","In Last FY, Avg. Num. of Days For Exported Goods To Clear all border control age",269535
+d36a_br,"haven_labelled, vctrs_vctr, double","In Last FY, Avg. Num. of Days For Exported Goods To Clear all border control age",270087
+d36b,"haven_labelled, vctrs_vctr, double","If less than a day, total hours for exported goods to clear all border control a",270075
+d36b_br,"haven_labelled, vctrs_vctr, double","If less than a day, total hours for exported goods to clear all border control a",270184
+d37,"haven_labelled, vctrs_vctr, double",Average cost of digital exports (% of value of goods),269535
+d37_br,"haven_labelled, vctrs_vctr, double",Average cost of digital exports (% of value of goods),270087
+d5,"haven_labelled, vctrs_vctr, double",Exports Longest Days - Customs,263821
+d5a,"haven_labelled, vctrs_vctr, double","In Clearing Exports Through Customs,Informal Gift/Payment Expected Or Requested?",258487
+d6,"haven_labelled, vctrs_vctr, double","In Last Fy, Export Losses Due To Theft As % Of Value Of Products",241955
+d7,"haven_labelled, vctrs_vctr, double","In Last Fy, Export Losses Due To Breakage Or Spoilage As % Of Value Of Products",242741
+d8,"haven_labelled, vctrs_vctr, double",In What Year Did This Establishment First Export Directly Or Indirectly?,200573
+d9,"haven_labelled, vctrs_vctr, double",Who Was The Principal Buyer For This EstablishmentÓ“ Output?,255794
+d10,"haven_labelled, vctrs_vctr, double","In Last Fy, % Of Value Of Products Lost In Transit Due To Theft",110883
+d10a,"haven_labelled, vctrs_vctr, double",% Consignment Value Dom. Exports Lost In Transit Due To Theft/Breakage/Spoilage,257316
+d11,"haven_labelled, vctrs_vctr, double","In Last Fy, % Of Value Of Products Lost In Transit Due To Breakage Or Spoilage?",124147
+d12a,"haven_labelled, vctrs_vctr, double",% Of Material Inputs And Supplies Of Domestic Origin In Last Fiscal Year,55756
+d12a_br,"haven_labelled, vctrs_vctr, double",Follow-up: % of Material Inputs And Supplies of Domestic origin In Last Fiscal Y,270193
+d12b,"haven_labelled, vctrs_vctr, double",% Of Material Inputs And Supplies Of Foreign Origin In Last Fiscal Year,56247
+d12b_br,character,Follow-up: % of Material Inputs And Supplies of Foreign origin In Last Fiscal Ye,0
+d13,"haven_labelled, vctrs_vctr, double",Were Any Of These Material Inputs And Supplies Imported Directly?,182716
+d13_br,"haven_labelled, vctrs_vctr, double",Follow-up: Were Any of These Material Inputs And Supplies Imported Directly?,269807
+d38x,character,Main origin of imports (economy code),0
+d38x_br,"haven_labelled, vctrs_vctr, double",Main origin of imports (economy code),270061
+d39,"haven_labelled, vctrs_vctr, double",Main point of entry,258522
+d39_br,"haven_labelled, vctrs_vctr, double",Main point of entry,269612
+d44,"haven_labelled, vctrs_vctr, double","Inspection, certification or licensing prior to point of entry",265528
+d45a,"haven_labelled, vctrs_vctr, double",Average duration to clear customs: Days,267061
+d45b,"haven_labelled, vctrs_vctr, double",Average duration to clear customs: Hours,267061
+d14,"haven_labelled, vctrs_vctr, double",Avg. Num. Of Days For Imported Goods To Clear Customs In Last Fiscal Year,214182
+d14a,"haven_labelled, vctrs_vctr, double",Avg. Num. of Days For Imported Goods To Clear Customs In Last Fiscal Year,253718
+d14a_br,"haven_labelled, vctrs_vctr, double",Avg. Num. of Days For Imported Goods To Clear Customs In Last Fiscal Year,269669
+d14b,"haven_labelled, vctrs_vctr, double","If less than a day, total hours for imported goods to clear customs",264176
+d14b_br,"haven_labelled, vctrs_vctr, double","If less than a day, total hours for imported goods to clear customs",270193
+d40a,"haven_labelled, vctrs_vctr, double","In Last FY, Avg. Num. of Days For Imported Goods To Clear all border control age",259181
+d40a_br,"haven_labelled, vctrs_vctr, double","In Last FY, Avg. Num. of Days For Imported Goods To Clear all border control age",269629
+d40b,"haven_labelled, vctrs_vctr, double","If less than a day, total hours for imported goods to clear all border control a",269217
+d40b_br,"haven_labelled, vctrs_vctr, double","If less than a day, total hours for imported goods to clear all border control a",270179
+d41,"haven_labelled, vctrs_vctr, double",DAP costs to comply with all import requirements (% of value of goods imported),253860
+d41_br,"haven_labelled, vctrs_vctr, double",DAP costs to comply with all import requirements (% of value of goods imported),269612
+d412,"haven_labelled, vctrs_vctr, double",Costs to Comply with all Import Requirements (% of value of goods imported),259051
+d412b,"haven_labelled, vctrs_vctr, double",Most Frequently Used Incoterm When Importing Directly,263716
+d15,"haven_labelled, vctrs_vctr, double",Imports Longest Days - Customs,264887
+d15a,"haven_labelled, vctrs_vctr, double","In Clearing Imports Through Customs,Informal Gift/Payment Expected Or Requested?",252607
+d16,"haven_labelled, vctrs_vctr, double","When You Receive Your Most Key Input, How Many Days Of Stock Is Available?",202596
+d17,"haven_labelled, vctrs_vctr, double",Av. Number Of Days Of Inventory On Hand After Receving Sales Item,242964
+d30a,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Transport?,67
+d30b,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Customs And Trade Regulations?,336
+o1,"haven_labelled, vctrs_vctr, double","In the last three years, establishment had any commercial dispute?",196390
+o1_br,"haven_labelled, vctrs_vctr, double","In the last three years, establishment had any commercial dispute?",266784
+o2,"haven_labelled, vctrs_vctr, double","Use of courts, arbitration etc. to (or attempt to ) resolve  commercial dispute?",260256
+o2_br,"haven_labelled, vctrs_vctr, double","Use of courts, arbitration etc. to (or attempt to ) resolve  commercial dispute?",269796
+o3a,"haven_labelled, vctrs_vctr, double",Reliable alternative to courts for resolving commercial disputes: Arbitration?,196575
+o3a_br,"haven_labelled, vctrs_vctr, double",Reliable alternative to courts for resolving commercial disputes: Arbitration?,266784
+o3a2,"haven_labelled, vctrs_vctr, double",Reliable mechanism to  resolve commercial disputes: Arbitration?,220252
+o3b,"haven_labelled, vctrs_vctr, double",Reliable alternative to courts for resolving commercial disputes:Mediation etc.?,196575
+o3b_br,"haven_labelled, vctrs_vctr, double",Reliable alternative to courts for resolving commercial disputes:Mediation etc.?,266784
+o3b2,"haven_labelled, vctrs_vctr, double",Reliable mechanism to resolve commercial disputes:Mediation?,220252
+e1,"haven_labelled, vctrs_vctr, double","In Last Fy, Main Market For Establishment'S Main Product",103319
+e1_br,"haven_labelled, vctrs_vctr, double","In Last FY, Main Market For Establishment'S Main Product. Asked of services esta",268209
+e1_esbr,"haven_labelled, vctrs_vctr, double","In Last FY, Main Market For Establishment'S Main Product. COMBINED VERSION Manuf",269653
+e2,"haven_labelled, vctrs_vctr, double",How Many Competitors Did This EstablishmentÓ“ Main Product/Product Line Face?,243068
+e2b,"haven_labelled, vctrs_vctr, double",Competitors For The Main Product/Service In The Main Market,142106
+e2b_br,numeric,Competitors For The Main Product/Service In The Main Market. Asked of services e,268223
+e2b_esbr,numeric,Competitors For The Main Product/Service In The Main Market. COMBINED VERSION Ma,269719
+e31a,"haven_labelled, vctrs_vctr, double",Market share of largest competitor in the last fiscal year,260035
+e31a_br,"haven_labelled, vctrs_vctr, double",Market share of largest competitor in the last fiscal year,268347
+e31b,"haven_labelled, vctrs_vctr, double",Market share of largest competitor in the last fiscal year,260158
+e31b_br,"haven_labelled, vctrs_vctr, double",Market share of largest competitor in the last fiscal year,268263
+e312,"haven_labelled, vctrs_vctr, double",Which Best Descibes Establishment's Main Market,225310
+e3,"haven_labelled, vctrs_vctr, double",No. Sales Of Main Product Increase/Remain The Same/Decrease In Last Fiscal Yr?,253762
+e4,"haven_labelled, vctrs_vctr, double",Did Price Of Main Product Increase/Remain The Same/Decrease In Last Fiscal Yr?,253765
+e6,"haven_labelled, vctrs_vctr, double",Do You Use Technology Licensed From A Foreign-Owned Company?,59396
+e6_br,"haven_labelled, vctrs_vctr, double",Do You Use Technology Licensed From A Foreign-Owned Company? Asked of services e,268185
+e6_esbr,"haven_labelled, vctrs_vctr, double",Do You Use Technology Licensed From A Foreign-Owned Company?  COMBINED VERSION M,269710
+e11,"haven_labelled, vctrs_vctr, double",Does This Establishment Compete Against Unregistered Or Informal Firms?,13584
+e32,"haven_labelled, vctrs_vctr, double",Change in competition in the last year?,197377
+e32_br,"haven_labelled, vctrs_vctr, double",Change in competition in the last year?,265954
+e33,"haven_labelled, vctrs_vctr, double",Establishment can increase prices more than competitors without losing customers,197377
+e33_br,"haven_labelled, vctrs_vctr, double",Establishment can increase prices more than competitors without losing customers,265954
+e34,"haven_labelled, vctrs_vctr, double",SOEs operating in the establishment's main market?,215379
+e34_br,"haven_labelled, vctrs_vctr, double",SOEs operating in the establishment's main market?,265954
+e35,"haven_labelled, vctrs_vctr, double",How SOE affects ability to grow and expand?,268570
+e35_br,"haven_labelled, vctrs_vctr, double",How SOE affects ability to grow and expand?,269774
+e30,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Practices Of Competitors In Informal Sector?,830
+f1,"haven_labelled, vctrs_vctr, double","In Last Fy, What Was The Capacity Utilization (%) Of This Establishment?",138267
+f2,"haven_labelled, vctrs_vctr, double",Number Of Hours Per Week Operated By The Establishment In Last Fiscal Year,167296
+g1a,"haven_labelled, vctrs_vctr, double",Percentage Of The Land Occupied: Owned By This Establishment,102537
+g1b,"haven_labelled, vctrs_vctr, double",Percentage Of The Land Occupied: Rented Or Leased By This Establishment,132010
+g1c,"haven_labelled, vctrs_vctr, double",Percentage Of The Land Occupied: Other,148071
+g2,"haven_labelled, vctrs_vctr, double",Applic. To Obtain A Construction-Related Permit Submitted Over The Last 2 Years,44
+g3,"haven_labelled, vctrs_vctr, double",How Many Days Did It Take For You To Obtain A Construction-Related Permit?,232053
+g4,"haven_labelled, vctrs_vctr, double",Informal Gift/Payment Expected Or Requested For A Construction-Related Permit,232021
+g31,"haven_labelled, vctrs_vctr, double","In last 2 years, establishment applied for occupancy permit",215739
+g31_br,"haven_labelled, vctrs_vctr, double","In last 2 years, establishment applied for occupancy permit",265954
+g32,"haven_labelled, vctrs_vctr, double",Wait for occupancy permit,265519
+g32_br,"haven_labelled, vctrs_vctr, double",Wait for occupancy permit,269700
+g33,"haven_labelled, vctrs_vctr, double",Cost of occupancy permit,265519
+g33_br,"haven_labelled, vctrs_vctr, double",Cost of occupancy permit,269700
+g34,"haven_labelled, vctrs_vctr, double","Land disputes and the sale of property: Deeds, Title certificates etc recognized",252191
+g5,"haven_labelled, vctrs_vctr, double",Total Of Sale'S Surface,270187
+g5a,"haven_labelled, vctrs_vctr, double",What Is The Total Selling Area In This Establishment?,223145
+g5b,"haven_labelled, vctrs_vctr, double",The Area Is Measured In:,232417
+g5bx,character,Specify Other Units (If Not Included Above) The Area Is Measured In,0
+g6a,"haven_labelled, vctrs_vctr, double",Percentage Of The Building Occupied: Owned By This Establishment,141425
+g6b,"haven_labelled, vctrs_vctr, double",Percentage Of The Building Occupied: Leased Or Rented By This Establishment,138334
+g6c,"haven_labelled, vctrs_vctr, double",Percentage Of The Building Occupied: Other,175307
+g7,"haven_labelled, vctrs_vctr, double",Acquired Additional Land Or Buildings To Expand Operations In The Last 3 Years?,259007
+g8,"haven_labelled, vctrs_vctr, double",Unsuccessful Attempts To Acquire Land,267470
+g8a,"haven_labelled, vctrs_vctr, double","In The Last 3 Years, Has This Est. Been Succes. In Acquiring Land ?",268208
+g30a,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Access To Land?,344
+g30b,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle Are Zoning Restrictions To The Operations Of This Firm?,261390
+h1,"haven_labelled, vctrs_vctr, double",New Products/Services Introduced Over Last 3 Yrs,51170
+h2,"haven_labelled, vctrs_vctr, double",New Products/Services Also New For Thr Establishment'S Main Market,206494
+h3x,character,Describe In Detail The Main New Or Significantly Improved Product Or Service,0
+h4x,character,Describe How The Main New/Significantly Improved Product Or Service Is Different,0
+h32x,character,Describe In Detail The Main New or Significantly Improved Product or Service,0
+h5,"haven_labelled, vctrs_vctr, double","During Last 3 Yrs, Establishment Introduced New/Significantly Improved Process",52178
+h6x,character,Describe Main New/Significantly Improved Process This Establishment Introduced,0
+h7x,character,How The Main New/Significantly Improved Process Is Different,0
+h62x,character,Describe Main New/Significantly Improved Process This Establishment Introduced,0
+h8,"haven_labelled, vctrs_vctr, double","During Last Fiscal Year, Establishment Spent On R&D (Excl Market Research)?",52177
+h30,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Courts,2630
+i1,"haven_labelled, vctrs_vctr, double","In Last Fy, Did This Establishment Pay For Security?",75570
+i2a,"haven_labelled, vctrs_vctr, double",Percentage Of Total Annual Sales Paid For Security In Last Fiscal Year,211250
+i2b,"haven_labelled, vctrs_vctr, double","In Last Fiscal Year, What Is The Total Annual Cost Of Security?",203744
+i3,"haven_labelled, vctrs_vctr, double","Losses Due To Theft, Robbery, Vandalism Or Arson Experienced In Last Fiscal Year",76045
+i4a,"haven_labelled, vctrs_vctr, double","Losses Due To Theft, Robbery, Vandalism Or Arson In Last Fiscal Yr (% Of Sales)",248123
+i4b,"haven_labelled, vctrs_vctr, double","Value Of Losses Due To Theft, Robbery, Vandalism Or Arson In Last Fiscal Yr",249733
+i30,"haven_labelled, vctrs_vctr, double","How Much Of An Obstacle: Crime, Theft And Disorder?",581
+ge3,numeric,Experience damage of physical assets due to extreme weather events?,196152
+ge3_br,"haven_labelled, vctrs_vctr, double",Experience damage of physical assets due to extreme weather events?,266881
+ge3a,numeric,Monetary damage of physical assets?,263499
+ge3a_br,"haven_labelled, vctrs_vctr, double",Monetary damage of physical assets?,270020
+ge7,numeric,"Over the last 3 years, establishment monitor its CO2 emissions?",196152
+ge7_br,"haven_labelled, vctrs_vctr, double","Over the last 3 years, establishment monitor its CO2 emissions?",266881
+ge8,"haven_labelled, vctrs_vctr, double","Over last 3 years, establishment adopt energy management measures?",269833
+ge8d,numeric,"Over last 3 years, establishment adopt energy management measures?",196512
+ge8d_br,"haven_labelled, vctrs_vctr, double","Over last 3 years, establishment adopt energy management measures?",266881
+h7a,"haven_labelled, vctrs_vctr, double","The Court System Is Fair, Impartial And Uncorrupted",73778
+h7b,"haven_labelled, vctrs_vctr, double",Agreement With: The Court System Is Quick,255770
+h7c,"haven_labelled, vctrs_vctr, double",Agreement With: The Court System Is Affordable,255771
+h7d,"haven_labelled, vctrs_vctr, double",Agreement With: The Court System Is Able To Enforce Its Decisions,255779
+j1,"haven_labelled, vctrs_vctr, double","The Court System Is Fair, Impartial And Uncorrupted.",269203
+j1a,"haven_labelled, vctrs_vctr, double",Interpretation Of Laws,244161
+j2,"haven_labelled, vctrs_vctr, double",What % Of Senior Management Time Was Spent In Dealing With Govt Regulations?,77
+j3,"haven_labelled, vctrs_vctr, double","Over The Last 12 Months, Was This Establishment Inspected By Tax Officials?",51
+j3_br,"haven_labelled, vctrs_vctr, double","Follow-up: Over The Last 12 Months, Was This Establishment Inspected By Tax offi",268715
+j4,"haven_labelled, vctrs_vctr, double",Frequency Of Inspections/Requirement For Meeting By Tax Officials,140341
+j5,"haven_labelled, vctrs_vctr, double",In Any Of These Inspections Was A Gift/Informal Payment Requested ?,141058
+j32,"haven_labelled, vctrs_vctr, double",Did any of these visits or meetings consist of a tax audit?,243175
+j32_br,"haven_labelled, vctrs_vctr, double",Did any of these visits or meetings consist of a tax audit?,268957
+j33,"haven_labelled, vctrs_vctr, double",Weeks until final audit report was received,259594
+j33_br,"haven_labelled, vctrs_vctr, double",Weeks until final audit report was received,269811
+j34,"haven_labelled, vctrs_vctr, double",Establishment outsourced some tax-related activities in the last FY,211437
+j34_br,"haven_labelled, vctrs_vctr, double",Establishment outsourced some tax-related activities in the last FY,268227
+j35a,"haven_labelled, vctrs_vctr, double",Total annual time spent on tax compliance (hours),256369
+j35a_br,"haven_labelled, vctrs_vctr, double",Total annual time spent on tax compliance (hours),269230
+j35b,"haven_labelled, vctrs_vctr, double",Average monthly time spent on tax compliance (hours),257363
+j35b_br,"haven_labelled, vctrs_vctr, double",Average monthly time spent on tax compliance (hours),269271
+j35,"haven_labelled, vctrs_vctr, double","Total Hours to Prepare, File and Pay Taxes",220252
+j36,"haven_labelled, vctrs_vctr, double","In last FY, did establishment file taxes electronically",193435
+j36_br,"haven_labelled, vctrs_vctr, double","In last FY, did establishment file taxes electronically",268227
+j37,"haven_labelled, vctrs_vctr, double","In last FY, did establishment pay taxes electronically",193435
+j37_br,"haven_labelled, vctrs_vctr, double","In last FY, did establishment pay taxes electronically",268227
+j38,"haven_labelled, vctrs_vctr, double","In the last 3 yrs., establishment has applied for a VAT refund",202652
+j38_br,"haven_labelled, vctrs_vctr, double","In the last 3 yrs., establishment has applied for a VAT refund",266811
+j39,"haven_labelled, vctrs_vctr, double",Weeks to receive VAT refund,253388
+j39_br,"haven_labelled, vctrs_vctr, double",Weeks to receive VAT refund,269859
+j40,"haven_labelled, vctrs_vctr, double",Main reason for not applying for a VAT tax refund,231566
+j40_br,"haven_labelled, vctrs_vctr, double",Main reason for not applying for a VAT tax refund,268012
+j6,"haven_labelled, vctrs_vctr, double",% Of Contract Value Avg. Firm Pays In Informal Gifts To Govt To Secure Contract?,219052
+j6a,"haven_labelled, vctrs_vctr, double",Government Contract Secured (Or Attempted) In The Last 12 Months?,20458
+j6a_br,"haven_labelled, vctrs_vctr, double",Follow-up: Government Contract Secured (or Attempted) In The Last 12 Months?,268715
+j41,"haven_labelled, vctrs_vctr, double",Degree of difficulty to comply with govt contract tender requirements,255001
+j41_br,"haven_labelled, vctrs_vctr, double",Degree of difficulty to comply with govt contract tender requirements,269821
+j42,"haven_labelled, vctrs_vctr, double",Establishment has held a govt contract in last 3 yrs?,197377
+j42_br,"haven_labelled, vctrs_vctr, double",Establishment has held a govt contract in last 3 yrs?,265954
+j43,"haven_labelled, vctrs_vctr, double",Typical number of days to receive payment under govt contract,258429
+j43_br,"haven_labelled, vctrs_vctr, double",Typical number of days to receive payment under govt contract,269689
+j7a,"haven_labelled, vctrs_vctr, double",Percent Of Total Annual Sales Paid In Informal Payments,36763
+j7b,"haven_labelled, vctrs_vctr, double",Total Annual Informal Payment,226759
+j8,"haven_labelled, vctrs_vctr, double",Sales Tax,250290
+j10,"haven_labelled, vctrs_vctr, double",Application To Obtain An Import License Submitted Over The Last 2 Years?,650
+j11,"haven_labelled, vctrs_vctr, double",How Many Days Did It Take To Obtain Your Import License?,239163
+j12,"haven_labelled, vctrs_vctr, double","When You Applied For An Import License, Was An Informal Gift/Payment Requested?",239143
+j13,"haven_labelled, vctrs_vctr, double",Application To Obtain An Operating License Submitted Over Last 2 Years?,514
+j14,"haven_labelled, vctrs_vctr, double",How Many Days Did It Take To Obtain Your Operating License?,215616
+j15,"haven_labelled, vctrs_vctr, double",When You Applied For Operating License Was An Informal Gift/Payment Requested?,215651
+j30a,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Tax Rates,93
+j30b,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Tax Administrations,1019
+j30c,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Business Licensing And Permits,210
+j30d,"haven_labelled, vctrs_vctr, double",Degree Of Obstacle For The Current Operation: Macroeconomic Instability,255764
+j30e,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Political Instability,833
+j30f,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Corruption,79
+j30g,"haven_labelled, vctrs_vctr, double",Restrictions On Hours Of Operation,266350
+j30h,"haven_labelled, vctrs_vctr, double",Restrictions On Pricing & Mark-Ups,265933
+k1a,"haven_labelled, vctrs_vctr, double",Purchases Paid Before Delivery,221333
+k1b,"haven_labelled, vctrs_vctr, double",Purchases Paid On Delivery,221333
+k1c,"haven_labelled, vctrs_vctr, double","In Last Fy, % Of Material Inputs Or Services Paid For After Delivery",132222
+k1d,"haven_labelled, vctrs_vctr, double","In Last Fiscal Yr, Did You Pay For Any Material Inputs/Services After Delivery?",258859
+k1e,"haven_labelled, vctrs_vctr, double",% Material Inputs/Services Paid For After Delivery In Last Fiscal Year,248581
+k2a,"haven_labelled, vctrs_vctr, double",% Of Total Annual Sales Paid For Before The Delivery In Last Fiscal Year,209218
+k2b,"haven_labelled, vctrs_vctr, double",And What Percent Were: Paid On Delivery?,209212
+k2c,"haven_labelled, vctrs_vctr, double","In Last Fy, % Of Total Annual Sales Paid For After Delivery",105514
+k3a,"haven_labelled, vctrs_vctr, double",% Of Working Capital Financed From Internal Funds/Retained Earnings,11376
+k3b,numeric,Proportion Of Working Capital Financed From Private Commercial Banks,249842
+k3bc,"haven_labelled, vctrs_vctr, double",% Of Working Capital Borrowed From Banks,11408
+k3c,numeric,% Of Working Capital Financed: State-Owned Banks And/Or Government Agency,249842
+k3d,numeric,Proportion Of Working Capital Financed From Family/Friends,253223
+k3e,"haven_labelled, vctrs_vctr, double",% Of Working Capital Borrowed From Non-Bank Financial Institutions,11407
+k3f,"haven_labelled, vctrs_vctr, double",% Of Working Capital Purchased On Credit/Advances From Suppliers /Customers,11908
+k3g,numeric,Proportion Of Working Capital Financed From Informal Sources,252624
+k3h,numeric,Proportion Of Working Capital Financed From Other Sources,253111
+k3hd,"haven_labelled, vctrs_vctr, double","% Of Working Capital Financed By Other (Money Lenders, Friends, Relatives, Etc)",29131
+k3hdx,character,Other (Specify),0
+k3i,"haven_labelled, vctrs_vctr, double",Capital/Remittances From People Who Are Migrants Abroad Or Who Are Returned Migr,251730
+k3j,"haven_labelled, vctrs_vctr, double",% of Working Capital Financed From Bonds,252191
+k3dgh,"haven_labelled, vctrs_vctr, double","% of Working Capital Financed By Friends, Relatives, Informal Money Lenders, Oth",252191
+k4,"haven_labelled, vctrs_vctr, double",Did This Establishment Purchase Any Fixed Assets In Last Fiscal Yr?,38
+k4b,"haven_labelled, vctrs_vctr, double",Purchase Any New/Used Fixed Assets?,216740
+k5a,"haven_labelled, vctrs_vctr, double","Last Fy, % Fixed Assets Funded By: Internal Funds/Retained Earnings",156809
+k5b,"haven_labelled, vctrs_vctr, double",Fixed Assets : Borrowed From Private Banks,253179
+k5bc,"haven_labelled, vctrs_vctr, double","Last Fy, % Fixed Assets Funded By: Bank Borrowing",157541
+k5c,"haven_labelled, vctrs_vctr, double",Fixed Assets: Borrowed From State-Owned Banks,253180
+k5d,numeric,Proportion Of Purchases Of Fixed Assets Financed From Family/Friends,261111
+k5e,"haven_labelled, vctrs_vctr, double","Last Fy, % Fixed Assets Funded By: Non-Bank Financial Institutions",163424
+k5f,"haven_labelled, vctrs_vctr, double","Last Fy, % Fixed Assets Funded By: Credit From Suppliers/Advances From Customers",157050
+k5g,numeric,Proportion Of Purchases Of Fixed Assets Financed From Informal Sources,260548
+k5h,numeric,Proportion Of Purchases Of Fixed Assets Financed From Other Sources,261110
+k5hd,"haven_labelled, vctrs_vctr, double",Other,262278
+k5hd_jx,character,Other (Specify),0
+k5hdej,"haven_labelled, vctrs_vctr, double","Fixed Assets:Other (Moneylenders, Friends, Relatives,",263635
+k5hdj,"haven_labelled, vctrs_vctr, double","Last Fy, % Fixed Assets Funded By: Other (Money Lenders\Friends\Relatives\Etc)",173396
+k5i,"haven_labelled, vctrs_vctr, double","Last Fy, % Fixed Assets Funded By: Ownersâ€™ Contributions Or Issued New Equity",156948
+k5j,"haven_labelled, vctrs_vctr, double",New Debt,248209
+k5k,"haven_labelled, vctrs_vctr, double",Capital/Remittances From People Who Are Migrants Abroad Or Who Are Returned Migr,269996
+k5dgh,"haven_labelled, vctrs_vctr, double","Last FY, % Fixed Assets Funded By: Friends\Relatives\Informal Money Lenders\Othe",263108
+k6,"haven_labelled, vctrs_vctr, double",Does This Establishment Have A Checking And\Or Saving Account?,2585
+k7,"haven_labelled, vctrs_vctr, double","At This Time, Does This Establishment Have An Overdraft Facility?",23142
+k8,"haven_labelled, vctrs_vctr, double",Establishment Has A Line Of Credit Or Loan From A Financial Institution?,1754
+k8_br,"haven_labelled, vctrs_vctr, double",Follow-up: Establishment Has A Line of Credit or Loan From A Financial Instituti,268393
+k82,"haven_labelled, vctrs_vctr, double",Establishment Has A Line of Credit or Loan From A Financial Institution?,212575
+k82_br,"haven_labelled, vctrs_vctr, double",Establishment Has A Line of Credit or Loan From A Financial Institution?,267397
+k82b,"haven_labelled, vctrs_vctr, double",Establishment Has A Line of Creidt from a Financial Institution?,252191
+k82a,"haven_labelled, vctrs_vctr, double",Establishment Has A Loan From A Financial Institution?,252191
+k9,"haven_labelled, vctrs_vctr, double",Type Of Financial Institution That Granted The Line Of Credit Or Loan,172591
+k10,"haven_labelled, vctrs_vctr, double",Year When The Most Recent Loan/Line Of Credit Approved,179357
+k11,"haven_labelled, vctrs_vctr, double","For The Most Recent Loan, What Was The Value At The Time Of Approval?",172672
+k12,"haven_labelled, vctrs_vctr, double",Duration,259352
+k13,"haven_labelled, vctrs_vctr, double",Financing Required For The Most Recent Line Of Credit Or Loan,172446
+k14a,"haven_labelled, vctrs_vctr, double","Type Of Collateral Required For The Most Recent Loan? Land, Buildings",204180
+k14b,"haven_labelled, vctrs_vctr, double",Type Of Collateral Required For The Most Recent Loan? Equipment,204187
+k14c,"haven_labelled, vctrs_vctr, double",Type Of Collateral Required For The Most Recent Loan? Accounts,204199
+k14d,"haven_labelled, vctrs_vctr, double",Type Of Collateral Required For The Most Recent Loan? Personal Assets,204200
+k14e,"haven_labelled, vctrs_vctr, double",Type Of Collateral Required For The Most Recent Loan? Other,204203
+k15,"haven_labelled, vctrs_vctr, double",Approx. Collateral Needed As % Of The Loan Value \ Value Of The Line Of Credit,219116
+k15a,"haven_labelled, vctrs_vctr, double",Value Of Collateral Required For The Most Recent Credit/Loan,209263
+k15b,"haven_labelled, vctrs_vctr, double",Total Number of Open Lines of Credit and Outstanding Loans Held By This Establis,207997
+k15c,"haven_labelled, vctrs_vctr, double",Total Outstanding Balance of All Open Lines of Credit and Loans Held By This Est,222540
+k15d,"haven_labelled, vctrs_vctr, double",Outstanding Personal Loans Used To Finance Establishment'S Business Activities?,64013
+k16,"haven_labelled, vctrs_vctr, double","In Last Fiscal Yr, Did Establishment Apply For New Loans/Lines Of Credit?",2050
+k16_br,"haven_labelled, vctrs_vctr, double","Follow-up: In Last FY, Did Establishment Apply For New Loans/Lines of Credit?",268393
+k162,"haven_labelled, vctrs_vctr, double","In Last FY, Did Establishment Apply For New Loans/Lines of Credit?",212424
+k162_br,"haven_labelled, vctrs_vctr, double","In Last FY, Did Establishment Apply For New Loans/Lines of Credit?",267397
+k162a,"haven_labelled, vctrs_vctr, double","In Last FY, Did Establishment Apply For Loans from Financial Institution?",252191
+k162b,"haven_labelled, vctrs_vctr, double","In Last FY, Did Establishment Apply For Line of Credit from Financial Institutio",252191
+k17,"haven_labelled, vctrs_vctr, double",Main Reason For Not Applying For New Loans Or New Lines Of Credit,72710
+k18,"haven_labelled, vctrs_vctr, double",# Of Applications,261121
+k18a,"haven_labelled, vctrs_vctr, double",Apply For Any New Loans/Lines Of Credit That Were Rejected In Last Fiscal Year?,263920
+k19,"haven_labelled, vctrs_vctr, double",# Rejects,260326
+k20,"haven_labelled, vctrs_vctr, double",What Was The Reason Given For The Last Rejection?,269293
+k20a,numeric,What Was The Outcome Of That Most Recent Application For Loan/Line Of Credit?,230056
+k20a1,"haven_labelled, vctrs_vctr, double",What Was The Outcome Of That Most Recent Application For Loan/Line Of Credit?,233535
+k20a1_br,"haven_labelled, vctrs_vctr, double",Follow-up: What Was The Outcome of That Most Recent Application For Loan/Line of,270107
+k21,"haven_labelled, vctrs_vctr, double",Financial Statements Checked & Certified By External Auditor In Last Fiscal Yr?,1432
+k33,"haven_labelled, vctrs_vctr, double",Percentage of payments received using e-payments,197377
+k33_br,"haven_labelled, vctrs_vctr, double",Percentage of payments received using e-payments,265954
+k34,"haven_labelled, vctrs_vctr, double",Main type of e-payment accepted,251786
+k34_br,"haven_labelled, vctrs_vctr, double",Main type of e-payment accepted,267697
+k342,"haven_labelled, vctrs_vctr, double",Main type of e-payment accepted,225939
+k342x,character,Other (Specify),0
+k35,"haven_labelled, vctrs_vctr, double",Avg. days to receive main type of e-payment,207908
+k35_br,"haven_labelled, vctrs_vctr, double",Avg. days to receive main type of e-payment,267797
+k36,"haven_labelled, vctrs_vctr, double",Cost per transaction (% of transaction) to receive main type of e-payment,207907
+k36_br,"haven_labelled, vctrs_vctr, double",Cost per transaction (% of transaction) to receive main type of e-payment,267797
+k37,"haven_labelled, vctrs_vctr, double",Monthly fees and subscription costs to receive main type of e-payment,224546
+k37_br,"haven_labelled, vctrs_vctr, double",Monthly fees and subscription costs to receive main type of e-payment,267797
+k38,"haven_labelled, vctrs_vctr, double",Percentage of payments made using e-payments,197377
+k38_br,"haven_labelled, vctrs_vctr, double",Percentage of payments made using e-payments,265955
+k39,"haven_labelled, vctrs_vctr, double",Main type of e-payment used to make payments,253117
+k39_br,"haven_labelled, vctrs_vctr, double",Main type of e-payment used to make payments,268293
+k392,"haven_labelled, vctrs_vctr, double",Main type of e-payment used to make payments,227209
+k392x,character,Other (Specify),0
+k40,"haven_labelled, vctrs_vctr, double",Cost per transaction (% of transaction) to make main type of e-payment,209992
+k40_br,"haven_labelled, vctrs_vctr, double",Cost per transaction (% of transaction) to make main type of e-payment,268324
+k30,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Access To Finance,2009
+j31,"haven_labelled, vctrs_vctr, double","In resolving commercial disputes, courts are independent and impartial",197377
+j31_br,"haven_labelled, vctrs_vctr, double","In resolving commercial disputes, courts are independent and impartial",265954
+r1,"haven_labelled, vctrs_vctr, double",What Best Describes What Happened When Problem In The Production/Provision of Se,184779
+r2,"haven_labelled, vctrs_vctr, double",Did This Establishment Monitor Any Production Performance Indicators?,186608
+r3,"haven_labelled, vctrs_vctr, double",How Many Production/Service Provision Performance Indicators Were Monitored At T,220307
+r4,"haven_labelled, vctrs_vctr, double",Did This Establishment Have Production Provision Targets?,192281
+r5,"haven_labelled, vctrs_vctr, double",What Best Describes The Time Frame Of Production/Service Provision Targets?,215164
+r6,"haven_labelled, vctrs_vctr, double",How Easy To Achieve Its Production Targets?,208595
+r7,"haven_labelled, vctrs_vctr, double",Who Was Aware Of The Production Targets At This Establishment?,208595
+r8,"haven_labelled, vctrs_vctr, double",Was There Performance Bonuses Based On Production Targets?,186158
+r9,"haven_labelled, vctrs_vctr, double",What Were Managers' Performance Bonuses Mostly Based On?,230784
+r10,"haven_labelled, vctrs_vctr, double",What Was The Primary Way Non-Managers Were Promoted?,184778
+r11,"haven_labelled, vctrs_vctr, double",When was an under-performing non-manager reassigned or dismissed?,184778
+k31,"haven_labelled, vctrs_vctr, double",Total cost to apply for most recent loan,261284
+k31_br,"haven_labelled, vctrs_vctr, double",Total cost to apply for most recent loan,269530
+k32,"haven_labelled, vctrs_vctr, double",Days to receive a decision about most recent loan application,258944
+k32_br,"haven_labelled, vctrs_vctr, double",Days to receive a decision about most recent loan application,269547
+l1,"haven_labelled, vctrs_vctr, double","Num. Permanent, Full-Time Employees At End Of Last Fiscal Year",23
+l1_br,"haven_labelled, vctrs_vctr, double","Follow-up: Num. Permanent, Full-Time Employees At End of Last Fiscal Year",268715
+l1a,"haven_labelled, vctrs_vctr, double","Num. Permanent, Part-Time Employees At End of Last Fiscal Year",192020
+l1a_br,"haven_labelled, vctrs_vctr, double","Num. Permanent, Full-Time Man Employees At End of Last Fiscal Year",268227
+l2,"haven_labelled, vctrs_vctr, double","Num. Permanent, Full-Time Employees At End Of 3 Fiscal Years Ago",1083
+l3a,"haven_labelled, vctrs_vctr, double",Num. Full-Time Employees At End Of Last Fiscal Yr: Production Workers,137450
+l3b,"haven_labelled, vctrs_vctr, double",Num. Full-Time Employees At End Of Last Fiscal Yr: Non-Production Workers,138403
+l4a,"haven_labelled, vctrs_vctr, double",No. Ft Employees Who Were Skilled Prod. Workers At End Of Last Fiscal Yr,86770
+l4a1,"haven_labelled, vctrs_vctr, double","Num. Of Permanent, Full-Time Highly Skilled Production Workers, Last Fy",151288
+l4a2,"haven_labelled, vctrs_vctr, double","Num. Of Permanent, Full-Time Semi Skilled Production Workers, Last Fy",151288
+l4b,"haven_labelled, vctrs_vctr, double","Num. Of Permanent, Full-Time Unskilled Production Workers, Last Fy",86901
+l5,"haven_labelled, vctrs_vctr, double",Num. Full-Time Employees At End Of Last Fiscal Yr: Female,141419
+l5a,"haven_labelled, vctrs_vctr, double",Num. Full-Time Employees At End Of Last Fiscal Yr: Female Production Workers,139860
+l5b,"haven_labelled, vctrs_vctr, double",Num. Full-Time Employees At End Of Last Fiscal Yr: Female Non-Production Workers,141134
+l6,"haven_labelled, vctrs_vctr, double",Num. Full-Time Temporary Employees At End Of Last Fiscal Yr,32
+l6a,"haven_labelled, vctrs_vctr, double","Female Temporary, Full-Time Workers Employed Throughout Last Fiscal Yr",215929
+l7,numeric,Percentage Of Full-Time Seasonal/Temporary Females,263821
+l8,"haven_labelled, vctrs_vctr, double",Avg. Length Of Employment Of All Full-Time Temporary Employees In Last Fiscal Yr,186554
+l37,"haven_labelled, vctrs_vctr, double","In the last 3 yrs., establishment has been involved in any labor dispute",197377
+l37_br,"haven_labelled, vctrs_vctr, double","In the last 3 yrs., establishment has been involved in any labor dispute",265954
+l38,"haven_labelled, vctrs_vctr, double",Typical number of weeks to resolve labor dispute,265793
+l38_br,"haven_labelled, vctrs_vctr, double",Typical number of months to resolve labor dispute,269735
+l38a,"haven_labelled, vctrs_vctr, double",Time to Resolve a labor Dispute:Months,266638
+l38b,"haven_labelled, vctrs_vctr, double",Time to Resolve a labor Dispute:Days,269269
+l39,"haven_labelled, vctrs_vctr, double",Cost to resolve labor dispute,266947
+l39_br,"haven_labelled, vctrs_vctr, double",Cost to resolve labor dispute,268723
+l40,"haven_labelled, vctrs_vctr, double","In last FY, was establishment visited by health and safety inspectors",197377
+l40_br,"haven_labelled, vctrs_vctr, double","In last FY, was establishment visited by health and safety inspectors",265954
+l41,"haven_labelled, vctrs_vctr, double",Was a report issued for health and safety inspection,245986
+l41_br,"haven_labelled, vctrs_vctr, double",Was a report issued for health and safety inspection,269032
+l9,"haven_labelled, vctrs_vctr, double",Avg. Education Production,253633
+l9a,"haven_labelled, vctrs_vctr, double",% Of This EstablisÓ“ Labor Force At The End Of The Last Fy Had A Univ. Degree,227665
+l9a2,"haven_labelled, vctrs_vctr, double",Average Number Of Years Of Education Of Typical Female,237231
+l9b,"haven_labelled, vctrs_vctr, double",% Of Full Time Workers Completed High School,139215
+l9b1,"haven_labelled, vctrs_vctr, double",Number of Full Time Workers Completed High School,235688
+l10,"haven_labelled, vctrs_vctr, double","Formal Training Programs For Permanent, Full-Time Employees In Last Fiscal Yr",22009
+l11a,"haven_labelled, vctrs_vctr, double",% Permanent Full-Time Production Employees Received Formal Training In Last Ffy,221751
+l11a1,"haven_labelled, vctrs_vctr, double",Training Programs Amount: Production Full-Time Permanent Employees Trained,263647
+l11b,"haven_labelled, vctrs_vctr, double",% Permanent Fulltime Nonproduction Employees Received Formal Training In Last Fy,221936
+l11b1,"haven_labelled, vctrs_vctr, double",Training Programs Amount:Non-Production Full-Time Permanent Employees Trained,263673
+l12,numeric,Percentage Of Workforce Unionized,255814
+l12a,"haven_labelled, vctrs_vctr, double",% Permanent Full-Time Female Employees Received Formal Training In Last FY,249512
+l12a1,"haven_labelled, vctrs_vctr, double",Training Programs Amount: Full-Time Permanent Female Employees Trained,260801
+l31,"haven_labelled, vctrs_vctr, double","In the last FY, number of workers establishment needed to hire",247318
+l31_br,"haven_labelled, vctrs_vctr, double","In the last FY, number of workers establishment needed to hire",265954
+l32,"haven_labelled, vctrs_vctr, double","In the last FY, number of workers establishment hired",263232
+l32_br,"haven_labelled, vctrs_vctr, double","In the last FY, number of workers establishment hired",268931
+l33,"haven_labelled, vctrs_vctr, double",Main reason establishment did not hire more workers in the last FY,267625
+l33_br,"haven_labelled, vctrs_vctr, double",Main reason establishment did not hire more workers in the last FY,269804
+l34,"haven_labelled, vctrs_vctr, double","In the last 3 yrs., establishment has dismissed any permanent, full-time workers",197377
+l34_br,"haven_labelled, vctrs_vctr, double","In the last 3 yrs., establishment has dismissed any permanent, full-time workers",265954
+l35,"haven_labelled, vctrs_vctr, double",Typical number of weeks to dismiss full-time permanent worker,252993
+l35_br,"haven_labelled, vctrs_vctr, double",Typical number of weeks to dismiss full-time permanent worker,269380
+l36,"haven_labelled, vctrs_vctr, double",Typical number of weeks paid in severance,252994
+l36_br,"haven_labelled, vctrs_vctr, double",Typical number of weeks paid in severance,269380
+l13,"haven_labelled, vctrs_vctr, double",Did Labour Regulations Affect Decisions Of Hiring Or Firing Permanent Workers?,255770
+l14a,numeric,Number Of Permanent Workers That This Establishment Would Have Hired,267500
+l14b,numeric,Number Of Permanent Workers That This Establishment Would Have Fired,267521
+l30a,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Labor Regulations?,695
+l30b,"haven_labelled, vctrs_vctr, double",How Much Of An Obstacle: Inadequately Educated Workforce?,89
+l30d,"haven_labelled, vctrs_vctr, double",How Much of An Obstacle: The regulation of dismissing workers?,252191
+l30c,"haven_labelled, vctrs_vctr, double",How Much of An Obstacle: The cost of hiring new workers?,220252
+m1d,"haven_labelled, vctrs_vctr, double",Rotation Order,169468
+m1a,"haven_labelled, vctrs_vctr, double",Biggest Obstacle Affecting The Operation Of This Establishment,20043
+n1a,"haven_labelled, vctrs_vctr, double",% Sales Manufacturing,258326
+n1b,"haven_labelled, vctrs_vctr, double",% Sales Services,258326
+n1c,"haven_labelled, vctrs_vctr, double",% Sales Other,258326
+n2a,"haven_labelled, vctrs_vctr, double","Total Labor Cost (Incl. Wages, Salaries, Bonuses, Etc) In Last Fiscal Year",651
+n2a_br,"haven_labelled, vctrs_vctr, double","Follow-up: Total Labor Cost (Incl. Wages, Salaries, Bonuses, Etc) In Last Fiscal",268715
+n2a2,"haven_labelled, vctrs_vctr, double",Social security payments and employment-based taxes,200575
+n2a2_br,"haven_labelled, vctrs_vctr, double",Social security payments and employment-based taxes,267462
+n2a1,"haven_labelled, vctrs_vctr, double","Total Labor Cost (Incl. Wages, Salaries, Bonuses, Etc) 2 fiscal years ago",250804
+n2b,"haven_labelled, vctrs_vctr, double",Total Annual Costs Of Electricity In Last Fiscal Year,30071
+n2k,"haven_labelled, vctrs_vctr, double",Total Annual Cost of Water,215589
+n2k_br,"haven_labelled, vctrs_vctr, double",Total Annual Cost of Water,267397
+n2l,"haven_labelled, vctrs_vctr, double","Total Annual Cost of high-speed, fixed broadband internet",215591
+n2l_br,"haven_labelled, vctrs_vctr, double","Total Annual Cost of high-speed, fixed broadband internet",267397
+n2c,"haven_labelled, vctrs_vctr, double",Total Annual Costs Of Communications Services In Last Fiscal Year,233599
+n2d,"haven_labelled, vctrs_vctr, double",Rent,250437
+n2e,"haven_labelled, vctrs_vctr, double",Cost Of Raw Materials And Intermediate Goods Used In Prod. In Last Fiscal Year,135144
+n2f,"haven_labelled, vctrs_vctr, double",Total Annual Costs Of Fuel In Last Fiscal Year,175693
+n2g,"haven_labelled, vctrs_vctr, double",Transportation,258381
+n2h,"haven_labelled, vctrs_vctr, double",Total Annual Costs Of Water In Last Fiscal Year,251291
+n2i,"haven_labelled, vctrs_vctr, double",Total Annual Cost Of Finished Goods/Materials Bought To Resell In Last Fiscal Yr,223855
+n2j,numeric,Other Cost Of Production Not Included Above,236570
+n2p,"haven_labelled, vctrs_vctr, double",Total Cost Of Sales In Last Fy,235789
+n2ra,numeric,"Total Rental Cost Of Machinery, Vehicles And Equipment",245815
+n2rb,numeric,Total Rental Cost Of Land And Buildings,245844
+n3,"haven_labelled, vctrs_vctr, double",What Were The Establishment Sales 3 Years Ago,968
+n4a,"haven_labelled, vctrs_vctr, double",Average Monthly Compensation Of A Production Full-Time Worker In Last Fiscal Yr,250261
+n4b,numeric,Average Monthly Compensation (Non-Production Worker),262098
+n5a,"haven_labelled, vctrs_vctr, double",Total Annual Expenditure For Purchases Of Equipment In Last Fiscal Yr,152673
+n5b,"haven_labelled, vctrs_vctr, double",Total Annual Expenditure For Purchases Of Land And Buildings In Last Fiscal Yr,152736
+n5c,"haven_labelled, vctrs_vctr, double",Total Annual Expenditure For Purchases Of Equipment In Year Prior To Last Fy,255429
+n5d,"haven_labelled, vctrs_vctr, double",Total Annual Expenditure On Land And Buildings In Year Prior To Last Fy,255429
+n6a,"haven_labelled, vctrs_vctr, double","Net Book Value Of Machinery Vehicles, And Equipment In Last Fiscal Year",198549
+n6b,"haven_labelled, vctrs_vctr, double",Net Book Value Of Land And Buildings In Last Fiscal Year,204778
+n7a,"haven_labelled, vctrs_vctr, double",Cost For Establishment To Re-Purchase All Of Its Machinery,140110
+n7b,"haven_labelled, vctrs_vctr, double",Cost For Establishment To Re-Purchase All Of Its Land And Buildings,205737
+n11,"haven_labelled, vctrs_vctr, double",Effective income-based tax rate,197379
+n11_br,"haven_labelled, vctrs_vctr, double",Effective income-based tax rate,265955
+n12,"haven_labelled, vctrs_vctr, double",Effective consumption tax rate,247320
+n12_br,"haven_labelled, vctrs_vctr, double",Effective consumption tax rate,265956
+a20d,numeric,Day of the last completed calendar fiscal year,129741
+a20d_br,numeric,Follow-up: Close Day of The Last Completed Fiscal Year,268715
+a20m,"haven_labelled, vctrs_vctr, double",Month of the last completed calendar fiscal year,129741
+a20m_br,"haven_labelled, vctrs_vctr, double",Follow-up: Close Month of The Last Completed Fiscal Year,268715
+a20y,numeric,Year of the last completed calendar fiscal year,129741
+a20y_br,numeric,Follow-up: Close Year of The Last Completed Fiscal Year,268715
+a20_br,character,YEAR,0
+q_version,"haven_labelled, vctrs_vctr, double","Version of the Questionnaire, for Indonesia 2023",267238
+a1d,"haven_labelled, vctrs_vctr, double",Mode of Collection,220253
+strata,"haven_labelled, vctrs_vctr, double","Groups defined by stratification region, size, sector, and panel codes",535
+strata_br,"haven_labelled, vctrs_vctr, double","Groups defined by stratification region, size, sector, and panel codes",269705
+strata_all,numeric,"Control: variable strata, unique by economy and year",535
