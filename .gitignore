@@ -4,5 +4,8 @@
 .RData
 .Ruserdata
 =======
-edata/*.dta
->>>>>>> f4b9a72ec8bebce77947258dc65c557a0e2205cc
+*.dta
+*.DTA
+edata.dta
+data_raw/*.dta
+data_raw/*.DTA
