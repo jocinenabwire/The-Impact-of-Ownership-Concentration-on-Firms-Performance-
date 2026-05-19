@@ -1,0 +1,8 @@
+               ownership_10             pbc_environment 
+                   1.850841                   16.859021 
+ownership_x_pbc_environment                  monitoring 
+                  17.631428                    1.172118 
+                 incentives                ln_employees 
+                   1.188168                    1.152130 
+                   firm_age          manager_experience 
+                   1.212716                    1.189929 

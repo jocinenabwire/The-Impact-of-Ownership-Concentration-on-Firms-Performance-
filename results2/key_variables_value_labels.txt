@@ -1,0 +1,305 @@
+VALUE LABELS FOR KEY VARIABLES
+
+
+----------------------------------------
+Variable: idstd 
+
+Variable label:
+[1] "WEB STD FIRMID"
+
+Value labels:
+NULL
+
+----------------------------------------
+Variable: country 
+
+Variable label:
+[1] "Economy"
+
+Value labels:
+NULL
+
+----------------------------------------
+Variable: region 
+
+Variable label:
+[1] "Region"
+
+Value labels:
+                 AFR                  EAP                  ECA 
+                   1                    2                    3 
+                 LAC                  MNA                  SAR 
+                   4                    5                    6 
+   High income: OECD High income: nonOECD 
+                   7                    8 
+
+----------------------------------------
+Variable: sample 
+
+Variable label:
+[1] "Dummy equal 1 for the latest survey in each economy"
+
+Value labels:
+NULL
+
+----------------------------------------
+Variable: wt 
+
+Variable label:
+[1] "Weight According To Median Eligibility"
+
+Value labels:
+NULL
+
+----------------------------------------
+Variable: stra_sector 
+
+Variable label:
+[1] "Cut: Stratification Sector"
+
+Value labels:
+NULL
+
+----------------------------------------
+Variable: sector_ms 
+
+Variable label:
+[1] "Sector: Manufacturing Or Services, based on stra_sector"
+
+Value labels:
+NULL
+
+----------------------------------------
+Variable: size 
+
+Variable label:
+[1] "Small, Medium, And Large Firm Categories Based On No. Of Employees"
+
+Value labels:
+         Small(<20)       Medium(20-99) Large(100 And Over) 
+                  1                   2                   3 
+
+----------------------------------------
+Variable: size_num 
+
+Variable label:
+[1] "Total Number Of Full Time Employees, Adjusted For Temp. and Part-time Workers"
+
+Value labels:
+NULL
+
+----------------------------------------
+Variable: isic_v4 
+
+Variable label:
+[1] "ISIC code (Rev. 4.0), based on d1a2_v4"
+
+Value labels:
+NULL
+
+----------------------------------------
+Variable: a14y 
+
+Variable label:
+[1] "Year"
+
+Value labels:
+NULL
+
+----------------------------------------
+Variable: a17 
+
+Variable label:
+[1] "Responses To The Questions About Figures Areâ€¦"
+
+Value labels:
+           Are taken directly from establishment records 
+                                                       1 
+              Are estimates computed with some precision 
+                                                       2 
+                    Are arbitrary and unreliable numbers 
+                                                       3 
+Are in some case taken from books in some case estimates 
+                                                       4 
+
+----------------------------------------
+Variable: b3 
+
+Variable label:
+[1] "What Percentage Of This Firm Does The Largest Owner(S) Own?"
+
+Value labels:
+Don't Know (Spontaneous) 
+                      -9 
+
+----------------------------------------
+Variable: b5 
+
+Variable label:
+[1] "Year Establishment Began Operations"
+
+Value labels:
+Don't Know (Spontaneous) 
+                      -9 
+
+----------------------------------------
+Variable: b6b 
+
+Variable label:
+[1] "In What Year Was This Establishment Formally Registered?"
+
+Value labels:
+       Don't Know (Spontaneous) Never regiestered (spontaneous) 
+                             -9                              -7 
+
+----------------------------------------
+Variable: b7 
+
+Variable label:
+[1] "How Many Years Of Experience Working In This Sector Does The Top Manager Have?"
+
+Value labels:
+       Don't Know (Spontaneous) Never regiestered (spontaneous) 
+                             -9                              -7 
+               One year or less 
+                              1 
+
+----------------------------------------
+Variable: d2 
+
+Variable label:
+[1] "In Last Fiscal Year, What Were This Establishmentâ€™S Total Annual Sales?"
+
+Value labels:
+Don't Know (Spontaneous) 
+                      -9 
+
+----------------------------------------
+Variable: d3c 
+
+Variable label:
+[1] "% Of Sales: Direct Exports"
+
+Value labels:
+Don't Know (Spontaneous) 
+                      -9 
+
+----------------------------------------
+Variable: r2 
+
+Variable label:
+[1] "Did This Establishment Monitor Any Production Performance Indicators?"
+
+Value labels:
+Don't know (spontaneous)                      Yes                       No 
+                      -9                        1                        2 
+
+----------------------------------------
+Variable: r8 
+
+Variable label:
+[1] "Was There Performance Bonuses Based On Production Targets?"
+
+Value labels:
+Don't know (spontaneous)                      Yes                       No 
+                      -9                        1                        2 
+
+----------------------------------------
+Variable: j7a 
+
+Variable label:
+[1] "Percent Of Total Annual Sales Paid In Informal Payments"
+
+Value labels:
+     Don't Know (Spontaneous)         Refusal (Spontaneous) 
+                           -9                            -8 
+No payments or gifts are paid 
+                            0 
+
+----------------------------------------
+Variable: j7b 
+
+Variable label:
+[1] "Total Annual Informal Payment"
+
+Value labels:
+     Don't Know (Spontaneous)         Refusal (Spontaneous) 
+                           -9                            -8 
+No payments or gifts are paid 
+                            0 
+
+----------------------------------------
+Variable: j30f 
+
+Variable label:
+[1] "How Much Of An Obstacle: Corruption"
+
+Value labels:
+Don't Know (Spontaneous)           Does Not Apply              No obstacle 
+                      -9                       -7                        0 
+          Minor obstacle        Moderate obstacle           Major obstacle 
+                       1                        2                        3 
+    Very severe obstacle 
+                       4 
+
+----------------------------------------
+Variable: l1 
+
+Variable label:
+[1] "Num. Permanent, Full-Time Employees At End Of Last Fiscal Year"
+
+Value labels:
+Don't Know (Spontaneous) 
+                      -9 
+
+----------------------------------------
+Variable: h1 
+
+Variable label:
+[1] "New Products/Services Introduced Over Last 3 Yrs"
+
+Value labels:
+Don't know (spontaneous)                      Yes                       No 
+                      -9                        1                        2 
+
+----------------------------------------
+Variable: h5 
+
+Variable label:
+[1] "During Last 3 Yrs, Establishment Introduced New/Significantly Improved Process"
+
+Value labels:
+Don't know (spontaneous)                      Yes                       No 
+                      -9                        1                        2 
+
+----------------------------------------
+Variable: f1 
+
+Variable label:
+[1] "In Last Fy, What Was The Capacity Utilization (%) Of This Establishment?"
+
+Value labels:
+Don't Know (Spontaneous) 
+                      -9 
+
+----------------------------------------
+Variable: e2 
+
+Variable label:
+[1] "How Many Competitors Did This EstablishmentÓ“ Main Product/Product Line Face?"
+
+Value labels:
+Don't Know (Spontaneous)                     None                      One 
+                      -9                        1                        2 
+                  2 To 5              More Than 5 
+                       3                        4 
+
+----------------------------------------
+Variable: e11 
+
+Variable label:
+[1] "Does This Establishment Compete Against Unregistered Or Informal Firms?"
+
+Value labels:
+Don't Know (Spontaneous)                      Yes                       No 
+                      -9                        1                        2 
