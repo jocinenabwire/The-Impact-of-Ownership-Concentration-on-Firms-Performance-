@@ -1,1 +1,2 @@
 The link to the google docs is here: https://unicorvinus-my.sharepoint.com/:w:/g/personal/jocine_ogoya_stud_uni-corvinus_hu/IQDGyIVWMYi2Rrk2Zyv0_rfpAY3S3nIiwCS7Bt7ACqHMrDU?e=9pwKhL
+for the 2nd version https://docs.google.com/document/d/13jpi9OUYAO2z-_LdgwCRiczedeISqKVA44UtPxwl5QA/edit?usp=sharing
