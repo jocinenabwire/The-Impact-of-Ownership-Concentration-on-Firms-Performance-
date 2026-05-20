@@ -1,30 +1,18 @@
 ############################################################
 # THE IMPACT OF OWNERSHIP CONCENTRATION ON FIRM PERFORMANCE
-# Empirical Corporate Governance Project
+# Focused empirical script
 #
 # Research question:
-# Does ownership concentration improve firm performance?
-# Is this relationship associated with monitoring, incentives,
-# and private benefits of control (PBC)?
+# Does ownership concentration affect firm performance?
+# Are monitoring, incentives, and private benefits of control
+# relevant mechanisms?
 #
-# Data:
-# World Bank Enterprise Surveys standardized dataset
+# Main regressions:
+# 1. Baseline model
+# 2. Mechanism model with PBC intensity
+# 3. Robustness model with any PBC signal
 #
-# Main outcome:
-# Log annual sales
-#
-# Main ownership variable:
-# b3 = ownership concentration / share owned by largest owner(s)
-#
-# Main PBC measure:
-# Constructed only from WBES variables:
-#   1. a17 = reliability / quality of reported financial figures
-#   2. j7a = informal payments as percentage of annual sales
-#
-# Preferred PBC regression measure:
-# Leave-one-out country-year-industry average of firm-level PBC
-#
-# Results folder:
+# Output folder:
 # results2
 ############################################################
 
@@ -40,7 +28,6 @@ rm(list = ls())
 # 1. Load packages
 ############################################################
 
-# List of packages needed for the whole script
 packages <- c(
   "tidyverse",
   "haven",
@@ -49,15 +36,11 @@ packages <- c(
   "labelled",
   "fixest",
   "modelsummary",
-  "broom",
-  "car",
-  "scales",
   "writexl",
-  "officer",
-  "flextable"
+  "scales",
+  "car"
 )
 
-# Install packages that are not yet installed
 installed_packages <- rownames(installed.packages())
 
 for (p in packages) {
@@ -66,7 +49,6 @@ for (p in packages) {
   }
 }
 
-# Load packages
 library(tidyverse)
 library(haven)
 library(here)
@@ -74,50 +56,70 @@ library(janitor)
 library(labelled)
 library(fixest)
 library(modelsummary)
-library(broom)
-library(car)
-library(scales)
 library(writexl)
-library(officer)
-library(flextable)
+library(scales)
+library(car)
 
 
 ############################################################
-# 2. Set project structure and import data
+# 2. Project folders and data import
 ############################################################
 
-# This script assumes that you opened the correct RStudio project.
-# The project should have this structure:
-#
-# Project folder
-# ├── data_raw
-# │   └── New_Comprehensive_April_01_2026.dta
-# ├── results2
-# └── script.R
+# The dataset should be inside data_raw.
+# This script assumes that the correct RStudio project is open.
 
-# Print current project folder
 print(here::here())
 
-# Create results folder if it does not exist
 dir.create(
   here::here("results2"),
   showWarnings = FALSE
 )
 
 
-# Import Stata dataset and clean variable names
-raw_data <- read_dta("edata.dta") %>%
+raw_data <- read_dta('edata.dta') %>%
   clean_names()
 
 
 ############################################################
-# 3. Export codebook from imported data
+# 3. Helper functions
 ############################################################
 
-# This creates a codebook with variable name, type, label,
-# number of missing values and number of non-missing values.
+# WBES datasets often use negative values as special missing codes.
+# This function removes labels and replaces negative values with NA.
 
-codebook_imported <- tibble(
+clean_negative_codes <- function(x) {
+  x <- as.numeric(haven::zap_labels(x))
+  ifelse(x < 0, NA_real_, x)
+}
+
+# Winsorise continuous variables at the 1st and 99th percentiles.
+
+winsorise <- function(x, probs = c(0.01, 0.99)) {
+  q <- quantile(x, probs = probs, na.rm = TRUE)
+  x <- ifelse(x < q[1], q[1], x)
+  x <- ifelse(x > q[2], q[2], x)
+  return(x)
+}
+
+# Convert WBES Yes/No variables:
+# 1 = Yes
+# 2 = No
+
+make_yes_no_dummy <- function(x) {
+  x <- clean_negative_codes(x)
+  case_when(
+    x == 1 ~ 1,
+    x == 2 ~ 0,
+    TRUE ~ NA_real_
+  )
+}
+
+
+############################################################
+# 4. Export simple codebook
+############################################################
+
+codebook <- tibble(
   variable_name = names(raw_data),
   
   variable_type = sapply(raw_data, function(x) {
@@ -131,163 +133,34 @@ codebook_imported <- tibble(
   
   missing_values = sapply(raw_data, function(x) {
     sum(is.na(x))
-  }),
-  
-  non_missing_values = sapply(raw_data, function(x) {
-    sum(!is.na(x))
   })
 )
 
 write_csv(
-  codebook_imported,
-  here::here("results2", "codebook_imported_variables.csv")
+  codebook,
+  here::here("results2", "codebook_variable_names_types_labels.csv")
 )
 
 write_xlsx(
-  codebook_imported,
-  here::here("results2", "codebook_imported_variables.xlsx")
+  codebook,
+  here::here("results2", "codebook_variable_names_types_labels.xlsx")
 )
 
 
 ############################################################
-# 4. Helper functions
-############################################################
-
-# WBES datasets usually use negative values for special missing codes.
-# Examples: -9 = don't know, -8 = refused, etc.
-# This function removes labels and converts all negative values to NA.
-
-clean_negative_codes <- function(x) {
-  x <- as.numeric(haven::zap_labels(x))
-  ifelse(x < 0, NA_real_, x)
-}
-
-# Winsorisation reduces the influence of extreme outliers.
-# Here we cap variables at the 1st and 99th percentiles.
-
-winsorise <- function(x, probs = c(0.01, 0.99)) {
-  q <- quantile(x, probs = probs, na.rm = TRUE)
-  x <- ifelse(x < q[1], q[1], x)
-  x <- ifelse(x > q[2], q[2], x)
-  return(x)
-}
-
-# WBES yes/no variables are usually coded:
-# 1 = Yes
-# 2 = No
-# This function converts them into:
-# 1 = Yes
-# 0 = No
-
-make_yes_no_dummy <- function(x) {
-  x <- clean_negative_codes(x)
-  case_when(
-    x == 1 ~ 1,
-    x == 2 ~ 0,
-    TRUE ~ NA_real_
-  )
-}
-
-
-############################################################
-# 5. Inspect key variables and value labels
-############################################################
-
-# These are the main variables expected to be used in the project.
-# The script checks which of them exist in the dataset.
-
-key_variables <- c(
-  "idstd",
-  "country",
-  "region",
-  "sample",
-  "wt",
-  "stra_sector",
-  "sector_ms",
-  "size",
-  "size_num",
-  "isic_v4",
-  "a14y",
-  "a17",
-  "b3",
-  "b5",
-  "b6b",
-  "b7",
-  "d2",
-  "d3c",
-  "r2",
-  "r8",
-  "j7a",
-  "j7b",
-  "j30f",
-  "l1",
-  "h1",
-  "h5",
-  "f1",
-  "e2",
-  "e11"
-)
-
-key_variables <- key_variables[key_variables %in% names(raw_data)]
-
-# Export key-variable codebook
-key_codebook <- codebook_imported %>%
-  filter(variable_name %in% key_variables)
-
-write_csv(
-  key_codebook,
-  here::here("results2", "key_variables_codebook.csv")
-)
-
-# Export value labels for key variables.
-# This helps verify how each variable is coded.
-
-capture.output(
-  {
-    cat("VALUE LABELS FOR KEY VARIABLES\n\n")
-    
-    for (v in key_variables) {
-      cat("\n----------------------------------------\n")
-      cat("Variable:", v, "\n\n")
-      
-      cat("Variable label:\n")
-      print(labelled::var_label(raw_data[[v]]))
-      
-      cat("\nValue labels:\n")
-      print(labelled::val_labels(raw_data[[v]]))
-    }
-  },
-  file = here::here("results2", "key_variables_value_labels.txt")
-)
-
-
-############################################################
-# 6. Construct main variables
+# 5. Construct variables
 ############################################################
 
 data <- raw_data %>%
   mutate(
     
     ########################################################
-    # 6.1 Firm identifiers and survey structure
+    # 5.1 Identifiers and fixed effects
     ########################################################
     
-    firm_id = if ("idstd" %in% names(raw_data)) {
-      idstd
-    } else {
-      row_number()
-    },
+    firm_id = if ("idstd" %in% names(raw_data)) idstd else row_number(),
     
     country_id = as.factor(country),
-    
-    region_id = if ("region" %in% names(raw_data)) {
-      as.factor(clean_negative_codes(region))
-    } else {
-      NA
-    },
-    
-    # a14y is usually the survey year in the standardized WBES data.
-    # If a14y does not exist, the script tries a20y.
     
     survey_year = if ("a14y" %in% names(raw_data)) {
       clean_negative_codes(a14y)
@@ -297,7 +170,19 @@ data <- raw_data %>%
       NA_real_
     },
     
-    country_year = interaction(country_id, survey_year, drop = TRUE),
+    industry = if ("isic_v4" %in% names(raw_data)) {
+      clean_negative_codes(isic_v4)
+    } else {
+      NA_real_
+    },
+    
+    industry_fe = as.factor(industry),
+    
+    sample_final = if ("sample" %in% names(raw_data)) {
+      clean_negative_codes(sample)
+    } else {
+      1
+    },
     
     weight = if ("wt" %in% names(raw_data)) {
       clean_negative_codes(wt)
@@ -305,51 +190,23 @@ data <- raw_data %>%
       NA_real_
     },
     
-    # sample == 1 is usually the latest standardized survey sample.
-    # If sample does not exist, all observations are kept.
     
-    latest_survey_sample = if ("sample" %in% names(raw_data)) {
-      clean_negative_codes(sample)
-    } else {
-      1
-    },
+    ########################################################
+    # 5.2 Dependent variable: firm performance
+    ########################################################
+    
+    sales = clean_negative_codes(d2),
+    sales = ifelse(sales <= 0, NA_real_, sales),
+    sales = winsorise(sales),
+    
+    log_sales = log(sales),
     
     
     ########################################################
-    # 6.2 Sector and industry variables
+    # 5.3 Main explanatory variable: ownership concentration
     ########################################################
-    
-    sector_strata = if ("stra_sector" %in% names(raw_data)) {
-      as.factor(stra_sector)
-    } else {
-      NA
-    },
-    
-    sector_main = if ("sector_ms" %in% names(raw_data)) {
-      as.factor(sector_ms)
-    } else {
-      NA
-    },
-    
-    industry_isic = if ("isic_v4" %in% names(raw_data)) {
-      clean_negative_codes(isic_v4)
-    } else {
-      NA_real_
-    },
-    
-    industry_fe = as.factor(industry_isic),
-    
-    
-    ########################################################
-    # 6.3 Ownership concentration
-    ########################################################
-    
-    # b3 is the main ownership concentration variable.
-    # It should measure the share owned by the largest owner(s), in percent.
     
     ownership = clean_negative_codes(b3),
-    
-    # Keep only valid percentages.
     
     ownership = ifelse(
       ownership < 0 | ownership > 100,
@@ -357,55 +214,15 @@ data <- raw_data %>%
       ownership
     ),
     
-    # Scale ownership in 10 percentage points.
-    # This makes coefficients easier to interpret.
-    # Example: coefficient on ownership_10 means the effect of a 10 p.p.
-    # increase in ownership concentration.
+    # Ownership in 10 percentage points.
+    # One unit = 10 percentage-point increase in ownership.
     
     ownership_10 = ownership / 10,
     
-    # Squared term for non-linear specification.
-    
-    ownership_sq = ownership_10^2,
-    
-    # High ownership dummy based on sample median.
-    
-    high_ownership = case_when(
-      !is.na(ownership) &
-        ownership >= median(ownership, na.rm = TRUE) ~ 1,
-      !is.na(ownership) &
-        ownership < median(ownership, na.rm = TRUE) ~ 0,
-      TRUE ~ NA_real_
-    ),
-    
     
     ########################################################
-    # 6.4 Firm performance: sales
+    # 5.4 Controls
     ########################################################
-    
-    # d2 is annual sales.
-    # We require positive sales before taking logs.
-    
-    sales_total = clean_negative_codes(d2),
-    
-    sales_total = ifelse(
-      sales_total <= 0,
-      NA_real_,
-      sales_total
-    ),
-    
-    sales_total = winsorise(sales_total),
-    
-    ln_sales = log(sales_total),
-    
-    
-    ########################################################
-    # 6.5 Firm scale
-    ########################################################
-    
-    # The preferred scale control is size_num.
-    # We do NOT use size categories as controls in the regressions.
-    # This avoids mechanically controlling away too much firm variation.
     
     employees = if ("size_num" %in% names(raw_data)) {
       clean_negative_codes(size_num)
@@ -415,35 +232,10 @@ data <- raw_data %>%
       NA_real_
     },
     
-    employees = ifelse(
-      employees <= 0,
-      NA_real_,
-      employees
-    ),
-    
+    employees = ifelse(employees <= 0, NA_real_, employees),
     employees = winsorise(employees),
     
-    ln_employees = log(employees),
-    
-    sales_per_worker = sales_total / employees,
-    
-    sales_per_worker = ifelse(
-      sales_per_worker <= 0,
-      NA_real_,
-      sales_per_worker
-    ),
-    
-    sales_per_worker = winsorise(sales_per_worker),
-    
-    ln_sales_per_worker = log(sales_per_worker),
-    
-    
-    ########################################################
-    # 6.6 Firm age and manager experience
-    ########################################################
-    
-    # b5 is usually the year when the establishment began operations.
-    # If b5 is not available, try b6b.
+    log_employees = log(employees),
     
     year_started = if ("b5" %in% names(raw_data)) {
       clean_negative_codes(b5)
@@ -463,190 +255,17 @@ data <- raw_data %>%
     
     firm_age = winsorise(firm_age),
     
-    # b7 is usually manager experience in years.
-    
-    manager_experience = if ("b7" %in% names(raw_data)) {
-      clean_negative_codes(b7)
+    foreign_ownership = if ("b2b" %in% names(raw_data)) {
+      clean_negative_codes(b2b)
     } else {
       NA_real_
     },
     
-    manager_experience = ifelse(
-      manager_experience < 0 | manager_experience > 80,
+    foreign_ownership = ifelse(
+      foreign_ownership < 0 | foreign_ownership > 100,
       NA_real_,
-      manager_experience
+      foreign_ownership
     ),
-    
-    manager_experience = winsorise(manager_experience),
-    
-    
-    ########################################################
-    # 6.7 Monitoring and incentives
-    ########################################################
-    
-    # r2: whether the establishment monitors production performance indicators.
-    # This is interpreted as a monitoring mechanism.
-    
-    monitoring = if ("r2" %in% names(raw_data)) {
-      make_yes_no_dummy(r2)
-    } else {
-      NA_real_
-    },
-    
-    # r8: whether managers/workers receive bonuses based on production targets.
-    # This is interpreted as an incentive mechanism.
-    
-    incentives = if ("r8" %in% names(raw_data)) {
-      make_yes_no_dummy(r8)
-    } else {
-      NA_real_
-    },
-    
-    
-    ########################################################
-    # 6.8 Main PBC component 1:
-    #     Low reliability / opacity of reported figures
-    ########################################################
-    
-    # a17 captures the reliability of answers about financial figures.
-    # The theoretical idea is that weak or unreliable reporting increases
-    # opacity and makes it easier for controlling insiders to extract
-    # private benefits.
-    #
-    # We use both numeric codes and value labels because coding may differ
-    # slightly across WBES versions.
-    
-    a17_num = if ("a17" %in% names(raw_data)) {
-      clean_negative_codes(a17)
-    } else {
-      NA_real_
-    },
-    
-    a17_label = if ("a17" %in% names(raw_data)) {
-      tolower(as.character(labelled::to_factor(raw_data$a17, levels = "labels")))
-    } else {
-      NA_character_
-    },
-    
-    # Main dummy:
-    # 1 = low reliability / high opacity
-    # 0 = more reliable reporting
-    #
-    # The label-based rule is used first.
-    # The numeric rule is a backup.
-    
-    low_data_reliability = case_when(
-      str_detect(a17_label, "arbitrary|unreliable|not reliable|guess") ~ 1,
-      str_detect(a17_label, "records|written|precision|precise|exact") ~ 0,
-      a17_num == 3 ~ 1,
-      a17_num %in% c(1, 2) ~ 0,
-      TRUE ~ NA_real_
-    ),
-    
-    
-    ########################################################
-    # 6.9 Main PBC component 2:
-    #     Informal payments
-    ########################################################
-    
-    # j7a measures informal payments as a percentage of annual sales.
-    # This is used as a proxy for extraction / diversion of firm resources
-    # in a weak governance environment.
-    
-    informal_payment_share = if ("j7a" %in% names(raw_data)) {
-      clean_negative_codes(j7a)
-    } else {
-      NA_real_
-    },
-    
-    # Keep valid percentage values only.
-    
-    informal_payment_share = ifelse(
-      informal_payment_share < 0 | informal_payment_share > 100,
-      NA_real_,
-      informal_payment_share
-    ),
-    
-    informal_payment_share = winsorise(informal_payment_share),
-    
-    # Convert informal payment share into a dummy.
-    # 1 = firm reports positive informal payments
-    # 0 = firm reports zero informal payments
-    
-    informal_payment_dummy = case_when(
-      !is.na(informal_payment_share) &
-        informal_payment_share > 0 ~ 1,
-      !is.na(informal_payment_share) &
-        informal_payment_share == 0 ~ 0,
-      TRUE ~ NA_real_
-    ),
-    
-    
-    ########################################################
-    # 6.10 Main firm-level PBC proxy
-    ########################################################
-    
-    # Main PBC proxy using only WBES information:
-    #
-    # PBC_core = average of:
-    #   1. low_data_reliability
-    #   2. informal_payment_dummy
-    #
-    # Values:
-    #   0   = no sign of PBC risk from these two components
-    #   0.5 = one component indicates PBC risk
-    #   1   = both components indicate PBC risk
-    
-    pbc_core = rowMeans(
-      cbind(low_data_reliability, informal_payment_dummy),
-      na.rm = FALSE
-    ),
-    
-    # Binary version:
-    # 1 if at least one component indicates PBC risk.
-    
-    pbc_core_binary = case_when(
-      !is.na(pbc_core) & pbc_core > 0 ~ 1,
-      !is.na(pbc_core) & pbc_core == 0 ~ 0,
-      TRUE ~ NA_real_
-    ),
-    
-    
-    ########################################################
-    # 6.11 Alternative PBC measure for robustness
-    ########################################################
-    
-    # j30f measures whether corruption is an obstacle.
-    # This is not the main PBC measure because it is a perception
-    # of the business environment, not a direct extraction measure.
-    # However, it is useful as a robustness check.
-    
-    corruption_obstacle = if ("j30f" %in% names(raw_data)) {
-      case_when(
-        clean_negative_codes(j30f) >= 3 ~ 1,
-        clean_negative_codes(j30f) %in% c(0, 1, 2) ~ 0,
-        TRUE ~ NA_real_
-      )
-    } else {
-      NA_real_
-    },
-    
-    # Alternative PBC proxy:
-    # average of low reliability, informal payments, and corruption obstacle.
-    
-    pbc_alt = rowMeans(
-      cbind(
-        low_data_reliability,
-        informal_payment_dummy,
-        corruption_obstacle
-      ),
-      na.rm = FALSE
-    ),
-    
-    
-    ########################################################
-    # 6.12 Additional outcomes and controls
-    ########################################################
     
     export_share = if ("d3c" %in% names(raw_data)) {
       clean_negative_codes(d3c)
@@ -666,941 +285,289 @@ data <- raw_data %>%
       TRUE ~ NA_real_
     ),
     
-    product_innovation = if ("h1" %in% names(raw_data)) {
-      make_yes_no_dummy(h1)
+    
+    ########################################################
+    # 5.5 Mechanisms: monitoring and incentives
+    ########################################################
+    
+    # r2 is used as a monitoring proxy.
+    
+    monitoring = if ("r2" %in% names(raw_data)) {
+      make_yes_no_dummy(r2)
     } else {
       NA_real_
     },
     
-    process_innovation = if ("h5" %in% names(raw_data)) {
-      make_yes_no_dummy(h5)
+    # r8 is used as an incentive proxy.
+    
+    incentives = if ("r8" %in% names(raw_data)) {
+      make_yes_no_dummy(r8)
     } else {
       NA_real_
     },
     
-    capacity_utilization = if ("f1" %in% names(raw_data)) {
-      clean_negative_codes(f1)
+    
+    ########################################################
+    # 5.6 PBC construction using only WBES variables
+    ########################################################
+    
+    # The theory of PBC is about the possibility that controlling
+    # shareholders extract private benefits or hide resource diversion.
+    #
+    # WBES does not have market-based control premia.
+    # Therefore, we construct a proxy using two observable signals:
+    #
+    # 1. Low reliability / opacity of financial figures: a17
+    # 2. Informal payments as a percentage of sales: j7a
+    
+    a17_num = if ("a17" %in% names(raw_data)) {
+      clean_negative_codes(a17)
     } else {
       NA_real_
     },
     
-    capacity_utilization = ifelse(
-      capacity_utilization < 0 | capacity_utilization > 100,
-      NA_real_,
-      capacity_utilization
-    ),
-    
-    number_competitors = if ("e2" %in% names(raw_data)) {
-      clean_negative_codes(e2)
+    a17_label = if ("a17" %in% names(raw_data)) {
+      tolower(as.character(labelled::to_factor(raw_data$a17, levels = "labels")))
     } else {
-      NA_real_
+      NA_character_
     },
     
-    number_competitors = ifelse(
-      number_competitors < 0 | number_competitors > 10000,
-      NA_real_,
-      number_competitors
-    ),
-    
-    informal_competition = if ("e11" %in% names(raw_data)) {
-      make_yes_no_dummy(e11)
-    } else {
-      NA_real_
-    }
-  )
-
-
-############################################################
-# 7. Construct leave-one-out PBC environment
-############################################################
-
-# Why do this?
-#
-# Firm-level PBC may be endogenous:
-#   - poorly performing firms may report more corruption;
-#   - firms with worse governance may report less reliable figures;
-#   - unobserved managerial quality may affect both sales and PBC.
-#
-# To reduce this problem, we construct a local PBC environment measure:
-# average PBC among other firms in the same country-year-industry cell.
-#
-# This is called leave-one-out because the firm's own PBC value is excluded.
-
-data <- data %>%
-  group_by(country_year, industry_fe) %>%
-  mutate(
-    
-    # Number of firms with non-missing PBC in the cell
-    
-    n_pbc_group = sum(!is.na(pbc_core)),
-    
-    # Leave-one-out average of core PBC
-    
-    pbc_environment = case_when(
-      n_pbc_group > 1 ~
-        (sum(pbc_core, na.rm = TRUE) - pbc_core) / (n_pbc_group - 1),
+    low_data_reliability = case_when(
+      str_detect(a17_label, "arbitrary|unreliable|not reliable|guess") ~ 1,
+      str_detect(a17_label, "records|written|precision|precise|exact") ~ 0,
+      a17_num == 3 ~ 1,
+      a17_num %in% c(1, 2) ~ 0,
       TRUE ~ NA_real_
     ),
     
-    # Number of firms with non-missing alternative PBC in the cell
+    informal_payments = if ("j7a" %in% names(raw_data)) {
+      clean_negative_codes(j7a)
+    } else {
+      NA_real_
+    },
     
-    n_pbc_alt_group = sum(!is.na(pbc_alt)),
+    informal_payments = ifelse(
+      informal_payments < 0 | informal_payments > 100,
+      NA_real_,
+      informal_payments
+    ),
     
-    # Leave-one-out average of alternative PBC
+    informal_payments = winsorise(informal_payments),
     
-    pbc_environment_alt = case_when(
-      n_pbc_alt_group > 1 ~
-        (sum(pbc_alt, na.rm = TRUE) - pbc_alt) / (n_pbc_alt_group - 1),
+    informal_payments_dummy = case_when(
+      !is.na(informal_payments) & informal_payments > 0 ~ 1,
+      !is.na(informal_payments) & informal_payments == 0 ~ 0,
       TRUE ~ NA_real_
+    ),
+    
+    # Main PBC intensity proxy:
+    #
+    # 0   = no PBC signal
+    # 0.5 = one PBC signal
+    # 1   = two PBC signals
+    #
+    # This is the main mechanism variable because it preserves
+    # the intensity of the WBES-based PBC proxy.
+    
+    pbc_intensity = rowMeans(
+      cbind(low_data_reliability, informal_payments_dummy),
+      na.rm = FALSE
+    ),
+    
+    # Robustness PBC variable:
+    # 1 = at least one PBC signal
+    # 0 = no PBC signal
+    
+    pbc_any = case_when(
+      !is.na(pbc_intensity) & pbc_intensity > 0 ~ 1,
+      !is.na(pbc_intensity) & pbc_intensity == 0 ~ 0,
+      TRUE ~ NA_real_
+    ),
+    
+    # PBC category for graphs.
+    
+    pbc_category = case_when(
+      pbc_intensity == 0 ~ "No PBC signal",
+      pbc_intensity == 0.5 ~ "One PBC signal",
+      pbc_intensity == 1 ~ "Two PBC signals",
+      TRUE ~ NA_character_
+    ),
+    
+    pbc_category = factor(
+      pbc_category,
+      levels = c(
+        "No PBC signal",
+        "One PBC signal",
+        "Two PBC signals"
+      )
     )
-  ) %>%
-  ungroup() %>%
-  mutate(
-    
-    # High PBC environment dummy.
-    # This is useful for easier graphical interpretation.
-    
-    high_pbc_environment = case_when(
-      !is.na(pbc_environment) &
-        pbc_environment >= median(pbc_environment, na.rm = TRUE) ~ 1,
-      !is.na(pbc_environment) &
-        pbc_environment < median(pbc_environment, na.rm = TRUE) ~ 0,
-      TRUE ~ NA_real_
-    ),
-    
-    # Interaction variables for diagnostics and VIF
-    
-    ownership_x_pbc_environment = ownership_10 * pbc_environment,
-    
-    ownership_x_high_pbc_environment =
-      ownership_10 * high_pbc_environment
   )
 
 
 ############################################################
-# 8. Construct analysis samples
+# 6. Final estimation sample
 ############################################################
 
-# Main sample for sales regressions
-analysis_sales <- data %>%
+analysis_data <- data %>%
   filter(
-    latest_survey_sample == 1,
-    !is.na(country_id),
-    !is.na(survey_year),
-    !is.na(country_year),
-    !is.na(industry_fe),
-    !is.na(ln_sales),
+    sample_final == 1,
+    !is.na(log_sales),
     !is.na(ownership_10),
-    !is.na(pbc_core),
-    !is.na(pbc_environment),
+    !is.na(log_employees),
+    !is.na(firm_age),
+    !is.na(foreign_ownership),
+    !is.na(exporter),
     !is.na(monitoring),
     !is.na(incentives),
-    !is.na(ln_employees),
-    !is.na(firm_age),
-    !is.na(manager_experience)
+    !is.na(pbc_intensity),
+    !is.na(pbc_any),
+    !is.na(country_id),
+    !is.na(survey_year),
+    !is.na(industry_fe)
   )
-
-# Alternative outcome samples
-
-analysis_productivity <- analysis_sales %>%
-  filter(!is.na(ln_sales_per_worker))
-
-analysis_export <- analysis_sales %>%
-  filter(!is.na(exporter))
-
-analysis_innovation <- analysis_sales %>%
-  filter(
-    !is.na(product_innovation),
-    !is.na(process_innovation)
-  )
-
-analysis_capacity <- analysis_sales %>%
-  filter(!is.na(capacity_utilization))
-
-analysis_weighted <- analysis_sales %>%
-  filter(!is.na(weight), weight > 0)
 
 
 ############################################################
-# 9. Sample summary
+# 7. Center variables to reduce multicollinearity
+############################################################
+
+# Interactions often generate high VIF because the interaction term
+# is mechanically correlated with its components.
+#
+# Mean-centering does not change the substantive model.
+# It reduces mechanical multicollinearity and improves interpretation.
+
+analysis_data <- analysis_data %>%
+  mutate(
+    ownership_10_c = ownership_10 - mean(ownership_10, na.rm = TRUE),
+    
+    foreign_ownership_c =
+      foreign_ownership - mean(foreign_ownership, na.rm = TRUE),
+    
+    pbc_intensity_c =
+      pbc_intensity - mean(pbc_intensity, na.rm = TRUE),
+    
+    pbc_any_c =
+      pbc_any - mean(pbc_any, na.rm = TRUE),
+    
+    ownership_pbc_intensity_c =
+      ownership_10_c * pbc_intensity_c,
+    
+    ownership_pbc_any_c =
+      ownership_10_c * pbc_any_c
+  )
+
+
+############################################################
+# 8. Sample summary
 ############################################################
 
 sample_summary <- tibble(
   sample = c(
     "Raw data",
-    "Latest survey sample",
-    "Main sales regression sample",
-    "Sales per worker sample",
-    "Export sample",
-    "Innovation sample",
-    "Capacity utilization sample",
-    "Weighted sample"
+    "Final estimation sample"
   ),
-  
   observations = c(
     nrow(raw_data),
-    nrow(data %>% filter(latest_survey_sample == 1)),
-    nrow(analysis_sales),
-    nrow(analysis_productivity),
-    nrow(analysis_export),
-    nrow(analysis_innovation),
-    nrow(analysis_capacity),
-    nrow(analysis_weighted)
+    nrow(analysis_data)
   )
 )
 
 write_csv(
   sample_summary,
-  here::here("results2", "table_00_sample_summary.csv")
+  here::here("results2", "sample_summary.csv")
 )
 
 
 ############################################################
-# 10. Missing values summary
+# 9. Clean descriptive statistics
 ############################################################
 
-missing_summary <- data %>%
+clean_descriptive_table <- analysis_data %>%
   summarise(
-    across(
-      c(
-        ln_sales,
-        ownership_10,
-        monitoring,
-        incentives,
-        low_data_reliability,
-        informal_payment_dummy,
-        pbc_core,
-        pbc_environment,
-        pbc_alt,
-        pbc_environment_alt,
-        ln_employees,
-        firm_age,
-        manager_experience,
-        exporter,
-        product_innovation,
-        process_innovation,
-        capacity_utilization
-      ),
-      ~ sum(is.na(.)),
-      .names = "missing_{.col}"
-    )
+    `Log sales: mean` = mean(log_sales, na.rm = TRUE),
+    `Log sales: SD` = sd(log_sales, na.rm = TRUE),
+    
+    `Ownership concentration (%): mean` = mean(ownership, na.rm = TRUE),
+    `Ownership concentration (%): median` = median(ownership, na.rm = TRUE),
+    `Ownership concentration = 100%` = mean(ownership == 100, na.rm = TRUE),
+    
+    `Log employees: mean` = mean(log_employees, na.rm = TRUE),
+    `Firm age: mean` = mean(firm_age, na.rm = TRUE),
+    `Foreign ownership (%): mean` = mean(foreign_ownership, na.rm = TRUE),
+    `Exporter share` = mean(exporter, na.rm = TRUE),
+    
+    `Monitoring share` = mean(monitoring, na.rm = TRUE),
+    `Incentives share` = mean(incentives, na.rm = TRUE),
+    
+    `Low data reliability share` = mean(low_data_reliability, na.rm = TRUE),
+    `Informal payments share` = mean(informal_payments_dummy, na.rm = TRUE),
+    `Any PBC signal share` = mean(pbc_any, na.rm = TRUE),
+    `PBC intensity: mean` = mean(pbc_intensity, na.rm = TRUE),
+    
+    `Observations` = n()
   ) %>%
   pivot_longer(
     everything(),
-    names_to = "variable",
-    values_to = "missing_count"
+    names_to = "Statistic",
+    values_to = "Value"
+  ) %>%
+  mutate(
+    Value = round(Value, 3)
   )
 
 write_csv(
-  missing_summary,
-  here::here("results2", "table_00_missing_summary.csv")
+  clean_descriptive_table,
+  here::here("results2", "clean_descriptive_statistics.csv")
+)
+
+modelsummary::datasummary_df(
+  clean_descriptive_table,
+  output = here::here("results2", "clean_descriptive_statistics.docx")
 )
 
 
 ############################################################
-# 11. Descriptive statistics
+# 10. Diagnostics: exact values and VIF
 ############################################################
 
-descriptive_data <- analysis_sales %>%
+# 10.1 Ownership exact values
+
+ownership_exact_values <- analysis_data %>%
+  count(ownership, sort = TRUE) %>%
+  mutate(share = n / sum(n))
+
+write_csv(
+  ownership_exact_values,
+  here::here("results2", "diagnostic_ownership_exact_values.csv")
+)
+
+# 10.2 PBC exact values
+
+pbc_exact_values <- analysis_data %>%
+  count(pbc_intensity, sort = TRUE) %>%
+  mutate(share = n / sum(n))
+
+write_csv(
+  pbc_exact_values,
+  here::here("results2", "diagnostic_pbc_exact_values.csv")
+)
+
+# 10.3 Correlation matrix
+
+correlation_data <- analysis_data %>%
   select(
-    ln_sales,
-    sales_total,
-    ownership,
-    ownership_10,
-    monitoring,
-    incentives,
-    low_data_reliability,
-    informal_payment_dummy,
-    informal_payment_share,
-    pbc_core,
-    pbc_core_binary,
-    pbc_environment,
-    high_pbc_environment,
-    pbc_alt,
-    pbc_environment_alt,
-    ln_employees,
-    employees,
+    ownership_10_c,
+    log_employees,
     firm_age,
-    manager_experience,
+    foreign_ownership_c,
     exporter,
-    product_innovation,
-    process_innovation,
-    capacity_utilization,
-    number_competitors,
-    informal_competition
-  )
-
-# Word table
-datasummary_skim(
-  descriptive_data,
-  output = here::here("results2", "table_01_descriptive_statistics.docx")
-)
-
-# CSV version
-descriptive_csv <- descriptive_data %>%
-  summarise(
-    across(
-      everything(),
-      list(
-        n = ~ sum(!is.na(.)),
-        mean = ~ mean(., na.rm = TRUE),
-        sd = ~ sd(., na.rm = TRUE),
-        min = ~ min(., na.rm = TRUE),
-        p25 = ~ quantile(., 0.25, na.rm = TRUE),
-        median = ~ median(., na.rm = TRUE),
-        p75 = ~ quantile(., 0.75, na.rm = TRUE),
-        max = ~ max(., na.rm = TRUE)
-      ),
-      .names = "{.col}_{.fn}"
-    )
-  ) %>%
-  pivot_longer(
-    everything(),
-    names_to = "statistic",
-    values_to = "value"
-  )
-
-write_csv(
-  descriptive_csv,
-  here::here("results2", "table_01_descriptive_statistics.csv")
-)
-
-
-############################################################
-# 12. Distribution tables for ownership and PBC
-############################################################
-
-ownership_distribution <- analysis_sales %>%
-  mutate(
-    ownership_group = case_when(
-      ownership < 25 ~ "0-24%",
-      ownership >= 25 & ownership < 50 ~ "25-49%",
-      ownership >= 50 & ownership < 75 ~ "50-74%",
-      ownership >= 75 ~ "75-100%",
-      TRUE ~ NA_character_
-    )
-  ) %>%
-  count(ownership_group) %>%
-  mutate(
-    share = n / sum(n)
-  )
-
-write_csv(
-  ownership_distribution,
-  here::here("results2", "table_02_ownership_distribution.csv")
-)
-
-pbc_distribution <- analysis_sales %>%
-  summarise(
-    n = n(),
-    share_low_data_reliability = mean(low_data_reliability, na.rm = TRUE),
-    share_informal_payment = mean(informal_payment_dummy, na.rm = TRUE),
-    mean_informal_payment_share = mean(informal_payment_share, na.rm = TRUE),
-    mean_pbc_core = mean(pbc_core, na.rm = TRUE),
-    mean_pbc_environment = mean(pbc_environment, na.rm = TRUE),
-    share_high_pbc_environment = mean(high_pbc_environment, na.rm = TRUE),
-    mean_pbc_alt = mean(pbc_alt, na.rm = TRUE),
-    mean_pbc_environment_alt = mean(pbc_environment_alt, na.rm = TRUE)
-  )
-
-write_csv(
-  pbc_distribution,
-  here::here("results2", "table_03_pbc_distribution.csv")
-)
-
-
-############################################################
-# 13. Graphs
-############################################################
-
-# 13.1 Ownership distribution
-
-fig_ownership_distribution <- ggplot(
-  analysis_sales,
-  aes(x = ownership)
-) +
-  geom_histogram(bins = 40, alpha = 0.8) +
-  labs(
-    title = "Distribution of ownership concentration",
-    x = "Ownership concentration (%)",
-    y = "Number of firms"
-  ) +
-  theme_minimal()
-
-ggsave(
-  here::here("results2", "fig_01_ownership_distribution.png"),
-  fig_ownership_distribution,
-  width = 7,
-  height = 4,
-  dpi = 300
-)
-
-
-# 13.2 Firm-level PBC distribution
-
-fig_pbc_distribution <- ggplot(
-  analysis_sales,
-  aes(x = pbc_core)
-) +
-  geom_histogram(bins = 10, alpha = 0.8) +
-  labs(
-    title = "Distribution of firm-level PBC proxy",
-    x = "PBC core index",
-    y = "Number of firms"
-  ) +
-  theme_minimal()
-
-ggsave(
-  here::here("results2", "fig_02_pbc_core_distribution.png"),
-  fig_pbc_distribution,
-  width = 7,
-  height = 4,
-  dpi = 300
-)
-
-
-# 13.3 PBC environment distribution
-
-fig_pbc_environment_distribution <- ggplot(
-  analysis_sales,
-  aes(x = pbc_environment)
-) +
-  geom_histogram(bins = 30, alpha = 0.8) +
-  labs(
-    title = "Distribution of leave-one-out PBC environment",
-    x = "PBC environment",
-    y = "Number of firms"
-  ) +
-  theme_minimal()
-
-ggsave(
-  here::here("results2", "fig_03_pbc_environment_distribution.png"),
-  fig_pbc_environment_distribution,
-  width = 7,
-  height = 4,
-  dpi = 300
-)
-
-
-# 13.4 Performance and ownership concentration
-
-fig_sales_ownership <- ggplot(
-  analysis_sales,
-  aes(x = ownership, y = ln_sales)
-) +
-  geom_point(alpha = 0.12) +
-  geom_smooth(method = "loess", se = TRUE) +
-  labs(
-    title = "Firm performance and ownership concentration",
-    x = "Ownership concentration (%)",
-    y = "Log annual sales"
-  ) +
-  theme_minimal()
-
-ggsave(
-  here::here("results2", "fig_04_sales_by_ownership.png"),
-  fig_sales_ownership,
-  width = 7,
-  height = 4,
-  dpi = 300
-)
-
-
-# 13.5 Performance and ownership by PBC environment
-
-fig_sales_ownership_pbc <- ggplot(
-  analysis_sales,
-  aes(
-    x = ownership,
-    y = ln_sales,
-    color = as.factor(high_pbc_environment)
-  )
-) +
-  geom_point(alpha = 0.10) +
-  geom_smooth(method = "loess", se = FALSE) +
-  labs(
-    title = "Ownership-performance relationship by PBC environment",
-    x = "Ownership concentration (%)",
-    y = "Log annual sales",
-    color = "High PBC environment"
-  ) +
-  theme_minimal()
-
-ggsave(
-  here::here("results2", "fig_05_sales_ownership_by_pbc.png"),
-  fig_sales_ownership_pbc,
-  width = 7,
-  height = 4,
-  dpi = 300
-)
-
-
-# 13.6 Mechanisms by ownership quartile
-
-fig_mechanisms <- analysis_sales %>%
-  mutate(
-    ownership_quartile = ntile(ownership, 4),
-    ownership_quartile = paste0("Q", ownership_quartile)
-  ) %>%
-  group_by(ownership_quartile) %>%
-  summarise(
-    monitoring = mean(monitoring, na.rm = TRUE),
-    incentives = mean(incentives, na.rm = TRUE),
-    pbc_core = mean(pbc_core, na.rm = TRUE),
-    pbc_environment = mean(pbc_environment, na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  pivot_longer(
-    cols = c(monitoring, incentives, pbc_core, pbc_environment),
-    names_to = "mechanism",
-    values_to = "mean_value"
-  ) %>%
-  ggplot(
-    aes(x = ownership_quartile, y = mean_value, group = mechanism)
-  ) +
-  geom_line() +
-  geom_point() +
-  facet_wrap(~ mechanism, scales = "free_y") +
-  labs(
-    title = "Governance mechanisms by ownership concentration quartile",
-    x = "Ownership concentration quartile",
-    y = "Mean value"
-  ) +
-  theme_minimal()
-
-ggsave(
-  here::here("results2", "fig_06_mechanisms_by_ownership.png"),
-  fig_mechanisms,
-  width = 8,
-  height = 5,
-  dpi = 300
-)
-
-
-############################################################
-# 14. Main regressions
-############################################################
-
-# Important modelling choices:
-#
-# 1. Ownership is scaled in 10 percentage points.
-# 2. We do not include size categories. We use ln_employees instead.
-# 3. Fixed effects:
-#      - country-year fixed effects
-#      - industry fixed effects
-# 4. Standard errors are clustered at the country level.
-# 5. Results are interpreted as conditional associations, not causal effects.
-
-model_1_baseline <- feols(
-  ln_sales ~ ownership_10 |
-    country_year + industry_fe,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-model_2_controls <- feols(
-  ln_sales ~ ownership_10 +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-model_3_mechanisms <- feols(
-  ln_sales ~ ownership_10 +
-    monitoring + incentives + pbc_core +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-model_4_pbc_environment <- feols(
-  ln_sales ~ ownership_10 +
-    monitoring + incentives + pbc_environment +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-model_5_interaction <- feols(
-  ln_sales ~ ownership_10 * pbc_environment +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-model_6_high_pbc_interaction <- feols(
-  ln_sales ~ ownership_10 * high_pbc_environment +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-model_7_nonlinear <- feols(
-  ln_sales ~ ownership_10 + ownership_sq +
-    monitoring + incentives + pbc_environment +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-main_models <- list(
-  "Baseline" = model_1_baseline,
-  "Controls" = model_2_controls,
-  "Firm PBC" = model_3_mechanisms,
-  "PBC environment" = model_4_pbc_environment,
-  "Ownership x PBC environment" = model_5_interaction,
-  "Ownership x high PBC" = model_6_high_pbc_interaction,
-  "Nonlinear ownership" = model_7_nonlinear
-)
-
-modelsummary(
-  main_models,
-  output = here::here("results2", "table_04_main_regressions.docx"),
-  stars = TRUE,
-  gof_omit = "IC|Log|RMSE",
-  notes = c(
-    "Dependent variable: log annual sales.",
-    "Ownership is measured in 10 percentage points.",
-    "The firm-level PBC proxy combines low data reliability from a17 and informal payments from j7a.",
-    "The preferred PBC measure is the leave-one-out country-year-industry PBC environment.",
-    "All models include country-year and industry fixed effects.",
-    "Standard errors are clustered at the country level.",
-    "Results should be interpreted as conditional associations, not causal effects."
-  )
-)
-
-modelsummary(
-  main_models,
-  output = here::here("results2", "table_04_main_regressions.html"),
-  stars = TRUE,
-  gof_omit = "IC|Log|RMSE"
-)
-
-
-############################################################
-# 15. Mechanism regressions
-############################################################
-
-# These regressions test whether ownership concentration is associated
-# with monitoring, incentives, and PBC.
-#
-# Monitoring and incentives are binary variables.
-# We estimate linear probability models with fixed effects.
-
-model_monitoring <- feols(
-  monitoring ~ ownership_10 +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-model_incentives <- feols(
-  incentives ~ ownership_10 +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-model_pbc_core <- feols(
-  pbc_core ~ ownership_10 +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-model_pbc_environment <- feols(
-  pbc_environment ~ ownership_10 +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-mechanism_models <- list(
-  "Monitoring" = model_monitoring,
-  "Incentives" = model_incentives,
-  "Firm PBC" = model_pbc_core,
-  "PBC environment" = model_pbc_environment
-)
-
-modelsummary(
-  mechanism_models,
-  output = here::here("results2", "table_05_mechanism_regressions.docx"),
-  stars = TRUE,
-  gof_omit = "IC|Log|RMSE",
-  notes = c(
-    "These models test whether ownership concentration is associated with proposed governance mechanisms.",
-    "Monitoring and incentives are binary variables estimated using linear probability models.",
-    "All models include country-year and industry fixed effects.",
-    "Standard errors are clustered at the country level."
-  )
-)
-
-
-############################################################
-# 16. Alternative outcomes
-############################################################
-
-# These models check whether the relationship appears in other outcomes:
-#   - sales per worker
-#   - exporter status
-#   - product innovation
-#   - process innovation
-#   - capacity utilization
-
-model_productivity <- feols(
-  ln_sales_per_worker ~ ownership_10 * pbc_environment +
-    monitoring + incentives +
-    firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_productivity,
-  cluster = ~ country_id
-)
-
-model_exporter <- feols(
-  exporter ~ ownership_10 * pbc_environment +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_export,
-  cluster = ~ country_id
-)
-
-model_product_innovation <- feols(
-  product_innovation ~ ownership_10 * pbc_environment +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_innovation,
-  cluster = ~ country_id
-)
-
-model_process_innovation <- feols(
-  process_innovation ~ ownership_10 * pbc_environment +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_innovation,
-  cluster = ~ country_id
-)
-
-model_capacity <- feols(
-  capacity_utilization ~ ownership_10 * pbc_environment +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_capacity,
-  cluster = ~ country_id
-)
-
-alternative_models <- list(
-  "Sales per worker" = model_productivity,
-  "Exporter" = model_exporter,
-  "Product innovation" = model_product_innovation,
-  "Process innovation" = model_process_innovation,
-  "Capacity utilization" = model_capacity
-)
-
-modelsummary(
-  alternative_models,
-  output = here::here("results2", "table_06_alternative_outcomes.docx"),
-  stars = TRUE,
-  gof_omit = "IC|Log|RMSE",
-  notes = c(
-    "Alternative outcomes are used as robustness and mechanism-related evidence.",
-    "Binary outcomes are estimated using linear probability models.",
-    "All models include country-year and industry fixed effects.",
-    "Standard errors are clustered at the country level."
-  )
-)
-
-
-############################################################
-# 17. Robustness check:
-#     Alternative PBC including corruption obstacle
-############################################################
-
-analysis_alt_pbc <- analysis_sales %>%
-  filter(
-    !is.na(pbc_alt),
-    !is.na(pbc_environment_alt)
-  )
-
-model_alt_pbc_1 <- feols(
-  ln_sales ~ ownership_10 * pbc_alt +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_alt_pbc,
-  cluster = ~ country_id
-)
-
-model_alt_pbc_2 <- feols(
-  ln_sales ~ ownership_10 * pbc_environment_alt +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_alt_pbc,
-  cluster = ~ country_id
-)
-
-alt_pbc_models <- list(
-  "Ownership x alternative firm PBC" = model_alt_pbc_1,
-  "Ownership x alternative PBC environment" = model_alt_pbc_2
-)
-
-modelsummary(
-  alt_pbc_models,
-  output = here::here("results2", "table_07_robustness_alternative_pbc.docx"),
-  stars = TRUE,
-  gof_omit = "IC|Log|RMSE",
-  notes = c(
-    "Alternative PBC includes low data reliability, informal payments, and corruption obstacle.",
-    "This is a robustness check. The preferred PBC measure uses only a17 and j7a.",
-    "All models include country-year and industry fixed effects.",
-    "Standard errors are clustered at the country level."
-  )
-)
-
-
-############################################################
-# 18. Robustness check:
-#     Weighted regressions
-############################################################
-
-model_unweighted_same_sample <- feols(
-  ln_sales ~ ownership_10 * pbc_environment +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_weighted,
-  cluster = ~ country_id
-)
-
-model_weighted <- feols(
-  ln_sales ~ ownership_10 * pbc_environment +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_weighted,
-  weights = ~ weight,
-  cluster = ~ country_id
-)
-
-weighted_models <- list(
-  "Unweighted same sample" = model_unweighted_same_sample,
-  "Weighted" = model_weighted
-)
-
-modelsummary(
-  weighted_models,
-  output = here::here("results2", "table_08_weighted_robustness.docx"),
-  stars = TRUE,
-  gof_omit = "IC|Log|RMSE",
-  notes = c(
-    "The weighted model uses WBES sampling weights.",
-    "Both models use the same sample with non-missing positive weights.",
-    "All models include country-year and industry fixed effects.",
-    "Standard errors are clustered at the country level."
-  )
-)
-
-
-############################################################
-# 19. Robustness check:
-#     Alternative fixed-effect structures
-############################################################
-
-model_fe_1 <- feols(
-  ln_sales ~ ownership_10 * pbc_environment +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience |
-    country_year + industry_fe,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-model_fe_2 <- feols(
-  ln_sales ~ ownership_10 * pbc_environment +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience |
-    country_year + sector_strata,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-model_fe_3 <- feols(
-  ln_sales ~ ownership_10 * pbc_environment +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience |
-    country_id + survey_year + industry_fe,
-  data = analysis_sales,
-  cluster = ~ country_id
-)
-
-fe_models <- list(
-  "Country-year + ISIC FE" = model_fe_1,
-  "Country-year + sector FE" = model_fe_2,
-  "Country + year + ISIC FE" = model_fe_3
-)
-
-modelsummary(
-  fe_models,
-  output = here::here("results2", "table_09_fixed_effects_robustness.docx"),
-  stars = TRUE,
-  gof_omit = "IC|Log|RMSE",
-  notes = c(
-    "This table checks whether results are robust to alternative fixed-effect structures.",
-    "Standard errors are clustered at the country level."
-  )
-)
-
-
-############################################################
-# 20. Diagnostics
-############################################################
-
-# 20.1 Number of clusters and fixed-effect groups
-
-cluster_summary <- analysis_sales %>%
-  summarise(
-    n_firms = n(),
-    n_countries = n_distinct(country_id),
-    n_country_years = n_distinct(country_year),
-    n_industries = n_distinct(industry_fe),
-    n_sectors = n_distinct(sector_strata)
-  )
-
-write_csv(
-  cluster_summary,
-  here::here("results2", "diagnostic_cluster_fe_summary.csv")
-)
-
-
-# 20.2 Correlation matrix
-
-correlation_data <- analysis_sales %>%
-  select(
-    ln_sales,
-    ownership_10,
     monitoring,
     incentives,
-    pbc_core,
-    pbc_environment,
-    ln_employees,
-    firm_age,
-    manager_experience
+    pbc_intensity_c,
+    ownership_pbc_intensity_c,
+    pbc_any_c,
+    ownership_pbc_any_c
   ) %>%
   drop_na()
 
@@ -1612,136 +579,433 @@ write_csv(
   here::here("results2", "diagnostic_correlation_matrix.csv")
 )
 
+# 10.4 VIF for mechanism model
 
-# 20.3 VIF diagnostic
-
-# VIF cannot be directly computed for high-dimensional fixed-effect models.
-# Therefore, we use a simple auxiliary OLS model with the same main regressors.
-# This is only a diagnostic for multicollinearity among regressors.
-
-diagnostic_lm <- lm(
-  ln_sales ~ ownership_10 + pbc_environment +
-    ownership_x_pbc_environment +
-    monitoring + incentives +
-    ln_employees + firm_age + manager_experience,
-  data = analysis_sales
+vif_model_mechanism <- lm(
+  log_sales ~ ownership_10_c +
+    log_employees + firm_age + foreign_ownership_c + exporter +
+    monitoring + incentives + pbc_intensity_c +
+    ownership_pbc_intensity_c,
+  data = analysis_data
 )
 
-vif_results <- car::vif(diagnostic_lm)
+vif_results_mechanism <- car::vif(vif_model_mechanism)
 
 capture.output(
-  vif_results,
-  file = here::here("results2", "diagnostic_vif_results.txt")
+  vif_results_mechanism,
+  file = here::here("results2", "diagnostic_vif_mechanism_model.txt")
+)
+
+# 10.5 VIF for robustness model
+
+vif_model_robustness <- lm(
+  log_sales ~ ownership_10_c +
+    log_employees + firm_age + foreign_ownership_c + exporter +
+    monitoring + incentives + pbc_any_c +
+    ownership_pbc_any_c,
+  data = analysis_data
+)
+
+vif_results_robustness <- car::vif(vif_model_robustness)
+
+capture.output(
+  vif_results_robustness,
+  file = here::here("results2", "diagnostic_vif_robustness_model.txt")
 )
 
 
 ############################################################
-# 20.4 Residual plot for main model
+# 11. Improved graphs with colors
 ############################################################
 
-# The model may drop some observations internally because of missing values
-# or fixed-effect issues. Therefore, we should not attach fitted values
-# directly to analysis_sales. Instead, we create a separate dataset using
-# only the observations actually used in the model.
+analysis_data <- analysis_data %>%
+  mutate(
+    ownership_group = case_when(
+      ownership < 50 ~ "Below 50%",
+      ownership >= 50 & ownership < 75 ~ "50-74%",
+      ownership >= 75 & ownership < 100 ~ "75-99%",
+      ownership == 100 ~ "100%",
+      TRUE ~ NA_character_
+    ),
+    
+    ownership_group = factor(
+      ownership_group,
+      levels = c("Below 50%", "50-74%", "75-99%", "100%")
+    )
+  )
 
-residual_data <- data.frame(
-  fitted_main_model = fitted(model_5_interaction),
-  residual_main_model = resid(model_5_interaction)
+# Color palettes
+ownership_colors <- c(
+  "Below 50%" = "#9ecae1",
+  "50-74%" = "#6baed6",
+  "75-99%" = "#3182bd",
+  "100%" = "#08519c"
 )
 
-fig_residuals <- ggplot(
-  residual_data,
-  aes(x = fitted_main_model, y = residual_main_model)
-) +
-  geom_point(alpha = 0.12) +
-  geom_hline(yintercept = 0, linetype = "dashed") +
-  labs(
-    title = "Residual plot: main ownership-performance model",
-    x = "Fitted values",
-    y = "Residuals"
+pbc_colors <- c(
+  "No PBC signal" = "#74c476",
+  "One PBC signal" = "#fd8d3c",
+  "Two PBC signals" = "#de2d26"
+)
+  
+
+############################################################
+# 11.1 Ownership concentration by groups
+############################################################
+
+fig_ownership_grouped <- analysis_data %>%
+  count(ownership_group) %>%
+  mutate(
+    share = n / sum(n),
+    label = paste0(round(share * 100, 1), "%")
+  ) %>%
+  ggplot(
+    aes(x = ownership_group, y = share, fill = ownership_group)
   ) +
-  theme_minimal()
+  geom_col(width = 0.65, show.legend = FALSE) +
+  geom_text(
+    aes(label = label),
+    vjust = -0.4,
+    size = 4
+  ) +
+  scale_fill_manual(values = ownership_colors) +
+  scale_y_continuous(
+    labels = scales::percent_format(),
+    limits = c(0, NA)
+  ) +
+  labs(
+    title = "Ownership concentration is highly concentrated",
+    subtitle = "Share of firms by ownership concentration group",
+    x = "Ownership concentration group",
+    y = "Share of firms"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank()
+  )
 
 ggsave(
-  here::here("results2", "fig_07_residual_plot.png"),
-  fig_residuals,
+  here::here("results2", "fig_01_ownership_grouped.png"),
+  fig_ownership_grouped,
   width = 7,
-  height = 4,
+  height = 4.5,
+  dpi = 300
+)
+
+
+############################################################
+# 11.2 Most common ownership values
+############################################################
+
+fig_top_ownership_values <- ownership_exact_values %>%
+  slice_head(n = 15) %>%
+  mutate(
+    ownership_label = paste0(ownership, "%"),
+    ownership_label = reorder(ownership_label, n)
+  ) %>%
+  ggplot(
+    aes(x = ownership_label, y = n, fill = n)
+  ) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  scale_fill_gradient(low = "#c6dbef", high = "#08519c") +
+  labs(
+    title = "Most common ownership concentration values",
+    subtitle = "The data show strong heaping at round ownership values",
+    x = "Ownership concentration",
+    y = "Number of firms"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank()
+  )
+
+ggsave(
+  here::here("results2", "fig_02_top_ownership_values.png"),
+  fig_top_ownership_values,
+  width = 7,
+  height = 5,
   dpi = 300
 )
 ############################################################
-# 21. Save cleaned analysis dataset
+# 11.3 PBC distribution by category
+############################################################
+
+fig_pbc_grouped <- analysis_data %>%
+  count(pbc_category) %>%
+  mutate(
+    share = n / sum(n),
+    label = paste0(round(share * 100, 1), "%")
+  ) %>%
+  ggplot(
+    aes(x = pbc_category, y = share, fill = pbc_category)
+  ) +
+  geom_col(width = 0.65, show.legend = FALSE) +
+  geom_text(
+    aes(label = label),
+    vjust = -0.4,
+    size = 4
+  ) +
+  scale_fill_manual(values = pbc_colors) +
+  scale_y_continuous(
+    labels = scales::percent_format(),
+    limits = c(0, NA)
+  ) +
+  labs(
+    title = "Most firms show no PBC signal",
+    subtitle = "PBC proxy combines low data reliability and informal payments",
+    x = "PBC category",
+    y = "Share of firms"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank()
+  )
+
+ggsave(
+  here::here("results2", "fig_03_pbc_grouped.png"),
+  fig_pbc_grouped,
+  width = 7,
+  height = 4.5,
+  dpi = 300
+)
+
+
+############################################################
+# 11.4 Firm performance by ownership group
+############################################################
+
+fig_sales_ownership_box <- ggplot(
+  analysis_data,
+  aes(x = ownership_group, y = log_sales, fill = ownership_group)
+) +
+  geom_boxplot(
+    outlier.alpha = 0.12,
+    color = "gray30",
+    show.legend = FALSE
+  ) +
+  stat_summary(
+    fun = mean,
+    geom = "point",
+    size = 2.8,
+    color = "black"
+  ) +
+  scale_fill_manual(values = ownership_colors) +
+  labs(
+    title = "Firm performance by ownership concentration group",
+    subtitle = "Black dots show group means; boxes show the distribution of log sales",
+    x = "Ownership concentration group",
+    y = "Log sales"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank()
+  )
+
+ggsave(
+  here::here("results2", "fig_04_sales_by_ownership_group.png"),
+  fig_sales_ownership_box,
+  width = 7,
+  height = 4.5,
+  dpi = 300
+)
+
+############################################################
+# 11.5 Mean performance by ownership group and PBC category
+############################################################
+
+fig_sales_ownership_pbc <- analysis_data %>%
+  group_by(ownership_group, pbc_category) %>%
+  summarise(
+    mean_log_sales = mean(log_sales, na.rm = TRUE),
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  filter(n >= 30) %>%
+  ggplot(
+    aes(
+      x = ownership_group,
+      y = mean_log_sales,
+      group = pbc_category,
+      color = pbc_category
+    )
+  ) +
+  geom_line(linewidth = 1.1) +
+  geom_point(size = 3) +
+  scale_color_manual(values = pbc_colors) +
+  labs(
+    title = "Ownership, PBC and average firm performance",
+    subtitle = "Mean log sales by ownership and PBC category; cells with n < 30 excluded",
+    x = "Ownership concentration group",
+    y = "Mean log sales",
+    color = "PBC category"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank()
+  )
+
+ggsave(
+  here::here("results2", "fig_05_sales_ownership_pbc_grouped.png"),
+  fig_sales_ownership_pbc,
+  width = 7.5,
+  height = 4.8,
+  dpi = 300
+)
+############################################################
+# 12. Regression models
+############################################################
+
+# Model 1: Baseline regression
+# This estimates the total association between ownership
+# concentration and firm performance.
+
+reg_baseline <- feols(
+  log_sales ~ ownership_10_c +
+    log_employees + firm_age + foreign_ownership_c + exporter |
+    country_id + survey_year + industry_fe,
+  data = analysis_data,
+  cluster = ~ country_id
+)
+
+
+# Model 2: Main mechanism regression
+# This uses PBC intensity as the main PBC measure.
+#
+# PBC intensity takes values:
+# 0   = no PBC signal
+# 0.5 = one PBC signal
+# 1   = two PBC signals
+#
+# The interaction tests whether ownership concentration is less/more
+# beneficial when PBC intensity is higher.
+
+reg_mechanism <- feols(
+  log_sales ~ ownership_10_c +
+    log_employees + firm_age + foreign_ownership_c + exporter +
+    monitoring + incentives +
+    pbc_intensity_c + ownership_pbc_intensity_c |
+    country_id + survey_year + industry_fe,
+  data = analysis_data,
+  cluster = ~ country_id
+)
+
+
+# Model 3: Robustness regression
+# This uses a binary PBC variable:
+# 1 = at least one PBC signal
+# 0 = no PBC signal
+
+reg_robustness <- feols(
+  log_sales ~ ownership_10_c +
+    log_employees + firm_age + foreign_ownership_c + exporter +
+    monitoring + incentives +
+    pbc_any_c + ownership_pbc_any_c |
+    country_id + survey_year + industry_fe,
+  data = analysis_data,
+  cluster = ~ country_id
+)
+
+regression_models <- list(
+  "Baseline" = reg_baseline,
+  "Mechanism: PBC intensity" = reg_mechanism,
+  "Robustness: any PBC signal" = reg_robustness
+)
+
+
+############################################################
+# 13. Export regression table
+############################################################
+
+coef_labels <- c(
+  "ownership_10_c" = "Ownership concentration",
+  "log_employees" = "Log employees",
+  "firm_age" = "Firm age",
+  "foreign_ownership_c" = "Foreign ownership",
+  "exporter" = "Exporter",
+  "monitoring" = "Monitoring",
+  "incentives" = "Incentives",
+  "pbc_intensity_c" = "PBC intensity",
+  "ownership_pbc_intensity_c" = "Ownership x PBC intensity",
+  "pbc_any_c" = "Any PBC signal",
+  "ownership_pbc_any_c" = "Ownership x Any PBC signal"
+)
+
+modelsummary(
+  regression_models,
+  output = here::here("results2", "main_regression_table.docx"),
+  coef_map = coef_labels,
+  stars = TRUE,
+  gof_omit = "IC|Log|RMSE",
+  notes = c(
+    "Dependent variable: log sales.",
+    "Ownership is measured in 10 percentage points and mean-centered in the regressions.",
+    "The main PBC measure is PBC intensity, constructed from low reliability of reported figures and informal payments.",
+    "PBC intensity takes values 0, 0.5 and 1.",
+    "The robustness model uses a binary indicator equal to one if the firm reports at least one PBC signal.",
+    "All regressions include country, survey-year, and industry fixed effects.",
+    "Standard errors are clustered at the country level.",
+    "Results are interpreted as conditional associations, not causal estimates."
+  )
+)
+
+modelsummary(
+  regression_models,
+  output = here::here("results2", "main_regression_table.html"),
+  coef_map = coef_labels,
+  stars = TRUE,
+  gof_omit = "IC|Log|RMSE"
+)
+
+
+############################################################
+# 14. Save estimation dataset
 ############################################################
 
 write_csv(
-  analysis_sales,
-  here::here("results2", "analysis_dataset_main_sales.csv")
+  analysis_data,
+  here::here("results2", "analysis_dataset_used_in_regressions.csv")
 )
 
 
 ############################################################
-# 22. Write methodological and interpretation notes
+# 15. Interpretation notes
 ############################################################
 
-method_notes <- paste0(
-  "THE IMPACT OF OWNERSHIP CONCENTRATION ON FIRM PERFORMANCE\n\n",
+interpretation_notes <- paste0(
+  "This script estimates three focused regressions.\n\n",
   
-  "1. Research question\n",
-  "This project examines whether ownership concentration is associated with firm performance ",
-  "and whether this relationship operates through monitoring, incentives, and private benefits of control (PBC).\n\n",
+  "Model 1 is the baseline specification. It estimates the association between ownership concentration and firm performance, controlling for firm size, firm age, foreign ownership, exporter status, country fixed effects, survey-year fixed effects, and industry fixed effects.\n\n",
   
-  "2. Main outcome\n",
-  "The main dependent variable is log annual sales, constructed from d2.\n\n",
+  "Model 2 is the main mechanism specification. It adds monitoring, incentives, PBC intensity, and the interaction between ownership concentration and PBC intensity. PBC intensity takes values 0, 0.5 and 1, depending on whether the firm reports no PBC signal, one PBC signal, or two PBC signals.\n\n",
   
-  "3. Ownership concentration\n",
-  "Ownership concentration is constructed from b3. It is scaled in 10 percentage points, ",
-  "so the coefficient on ownership_10 should be interpreted as the association of a 10 percentage-point increase ",
-  "in ownership concentration with log sales.\n\n",
+  "Model 3 is a robustness specification. It uses a binary PBC indicator equal to one when the firm reports at least one PBC signal: low reliability of reported financial figures or informal payments.\n\n",
   
-  "4. Monitoring and incentives\n",
-  "Monitoring is constructed from r2. Incentives are constructed from r8. Both are coded as binary variables.\n\n",
+  "Tobit is not used because the dependent variable is log sales, which is continuous. PBC is a discrete explanatory variable, not a censored dependent variable. Therefore, fixed-effects OLS is appropriate for the main specification.\n\n",
   
-  "5. PBC measurement using only WBES variables\n",
-  "The WBES does not contain market-based information such as voting premia, block-transfer prices, or control premia. ",
-  "Therefore, the script constructs a proxy for PBC risk using only information available in the dataset. ",
-  "The main firm-level PBC proxy combines two components: low reliability of reported financial figures from a17 ",
-  "and positive informal payments from j7a. The logic is that opaque reporting and informal payments are observable ",
-  "manifestations of weak governance environments where private benefits of control are more likely.\n\n",
+  "Ownership and PBC variables are mean-centered before constructing interaction terms. This reduces mechanical multicollinearity between the interaction term and its components and improves interpretation.\n\n",
   
-  "6. Preferred PBC environment measure\n",
-  "To reduce simultaneity and firm-level reporting bias, the preferred PBC measure in regressions is a leave-one-out ",
-  "country-year-industry average of firm-level PBC. This excludes the firm's own PBC value and captures the local ",
-  "governance environment in which the firm operates.\n\n",
+  "Corruption and ownership-by-corruption interactions are excluded from the main specification because corruption is a broad business-environment perception and is not the preferred theoretical measure of private benefits of control in this dataset.\n\n",
   
-  "7. Main specification\n",
-  "The main model regresses log sales on ownership concentration, PBC environment, the interaction between ownership ",
-  "and PBC environment, monitoring, incentives, firm size, firm age, manager experience, country-year fixed effects, ",
-  "and industry fixed effects. Standard errors are clustered at the country level.\n\n",
+  "The interaction between ownership and PBC is central. If the coefficient is negative, this suggests that ownership concentration is less beneficial, or more harmful, when private benefits of control are more likely.\n\n",
   
-  "8. Interpretation of the interaction term\n",
-  "The coefficient on ownership_10:pbc_environment shows whether the association between ownership concentration ",
-  "and firm performance differs in environments where private benefits of control are more likely. ",
-  "A negative coefficient would be consistent with the idea that ownership concentration is less beneficial when PBC risk is high.\n\n",
-  
-  "9. Endogeneity warning\n",
-  "The results should not be interpreted as causal estimates. Ownership concentration is not randomly assigned. ",
-  "Better firms may attract concentrated owners, concentrated owners may select into firms with higher expected performance, ",
-  "and omitted managerial quality may affect both governance and performance. Monitoring, incentives, and PBC may also be endogenous. ",
-  "Therefore, the results are best interpreted as conditional associations consistent with the proposed theoretical mechanisms.\n\n",
-  
-  "10. Robustness checks\n",
-  "The script includes robustness checks using alternative outcomes, alternative PBC including corruption obstacle, ",
-  "sampling weights, and alternative fixed-effect structures.\n\n"
+  "The results should be interpreted as conditional associations, not causal effects, because ownership concentration and governance mechanisms are not randomly assigned.\n"
 )
 
 writeLines(
-  method_notes,
-  here::here("results2", "methodological_and_interpretation_notes.txt")
+  interpretation_notes,
+  here::here("results2", "interpretation_notes.txt")
 )
 
 
 ############################################################
-# 23. End of script
+# END
 ############################################################
 
-message("Script completed successfully. Check the results2 folder.")
+message("Focused updated script completed successfully. Check the results2 folder.")
